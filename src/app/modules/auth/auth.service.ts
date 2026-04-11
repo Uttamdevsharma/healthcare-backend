@@ -33,6 +33,7 @@ const register = async(payload : IRegisterPayload) => {
     }
 
 
+   try {
     const patient = await prisma.$transaction(async(tx) => {
 
         const patientTX = await tx.patient.create({
@@ -53,6 +54,15 @@ const register = async(payload : IRegisterPayload) => {
         patient
 
     }
+   }catch(error){
+    console.log("Transaction error",error)
+    await prisma.user.delete({
+        where : {
+            id:data.user.id
+        }
+    })
+    throw error
+   }
 
 }
 

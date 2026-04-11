@@ -1,7 +1,10 @@
-import express, { Application, Request, Response } from 'express'
+import express, { Application, NextFunction, Request, Response } from 'express'
 import cookieParser from 'cookie-parser'
 import { IndexRoutes } from './app/routes';
 import cors from 'cors'
+import { success } from 'better-auth';
+import { error } from 'node:console';
+import { globalErrorHandler } from './app/middleware/globalErrorHandler';
 
 const app :Application = express()
 
@@ -27,6 +30,9 @@ app.get("/" , async(req:Request,res:Response) => {
         message : 'Healthcare API is working'
     })
 })
+
+
+app.use(globalErrorHandler)
 
 
 export default app
