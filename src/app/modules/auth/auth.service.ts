@@ -2,6 +2,7 @@ import status from "http-status";
 import AppError from "../../errorHelpers/AppError";
 import { auth } from "../../lib/auth";
 import { UserStatus } from "../../../generated/prisma/enums";
+import { prisma } from "../../lib/prisma";
 
 
 interface IRegisterPayload {
@@ -31,7 +32,28 @@ const register = async(payload : IRegisterPayload) => {
         throw new AppError(status.BAD_REQUEST,"Failed to register patient")
     }
 
-    return data
+
+    const patient = await prisma.$transaction(async(tx) => {
+
+        const patientTX = await tx.patient.create({
+            data : {
+                userId : data.user.id,
+                name : payload.name,
+                email : payload.email
+
+            }
+        })
+
+        return patientTX
+    })
+
+
+    return {
+        ...data,
+        patient
+
+    }
+
 }
 
 
