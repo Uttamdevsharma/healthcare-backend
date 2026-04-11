@@ -1,6 +1,7 @@
 import express, { Application, Request, Response } from 'express'
 import cookieParser from 'cookie-parser'
 import { IndexRoutes } from './app/routes';
+import cors from 'cors'
 
 const app :Application = express()
 
@@ -11,7 +12,8 @@ app.use(express.urlencoded({extended:true}))
 
 //middleware
 app.use(express.json());
-app.use(cookieParser());
+// app.use(cookieParser());
+app.use(cors())
 
 
 
