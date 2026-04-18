@@ -5,6 +5,7 @@ import cors from 'cors'
 import { success } from 'better-auth';
 import { error } from 'node:console';
 import { globalErrorHandler } from './app/middleware/globalErrorHandler';
+import { notFound } from './app/middleware/notFound';
 
 const app :Application = express()
 
@@ -33,6 +34,7 @@ app.get("/" , async(req:Request,res:Response) => {
 
 
 app.use(globalErrorHandler)
+app.use(notFound)
 
 
 export default app
