@@ -11,7 +11,7 @@ const router = Router()
 router.use("/auth",AuthRoutes)
 router.use("/specialties",SpecialtyRoutes)
 router.use("/users",UserRouter)
-router.use('doctors',DoctorRoutes)
+router.use('/doctors',DoctorRoutes)
 
 
 export const IndexRoutes = router

@@ -35,6 +35,8 @@ export const globalErrorHandler = (err:any,req:Request,res:Response,next:NextFun
         stack : envVars.NODE_ENV === 'development' ? stack : undefined
     }
 
+    res.status(statusCode).json(errorResponse)
+
 
 
 
