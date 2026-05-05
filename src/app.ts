@@ -16,7 +16,7 @@ app.use(express.urlencoded({extended:true}))
 
 //middleware
 app.use(express.json());
-// app.use(cookieParser());
+app.use(cookieParser());
 app.use(cors())
 
 
