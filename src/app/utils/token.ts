@@ -16,6 +16,7 @@ const getAccessToken = (payload: JwtPayload) => {
     return accessToken;
 }
 
+
 const getRefreshToken = (payload: JwtPayload) => {
     const refreshToken = jwtUtils.createToken(
         payload,
