@@ -4,20 +4,16 @@ import { auth } from "../../lib/auth";
 import { UserStatus } from "../../../generated/prisma/enums";
 import { prisma } from "../../lib/prisma";
 import { tokenUtils } from "../../utils/token";
+import { ILoginUserPayload, IRegisterPatientPayload } from "./auth.inferface";
+import { IRequestUser } from "../../interfaces/requestUser.interface";
+import { jwtUtils } from "../../utils/jwt";
+import { JwtPayload } from "jsonwebtoken";
+import { envVars } from "../../config/env";
 
 
-interface IRegisterPayload {
-    name:string;
-    email:string;
-    password:string
-}
 
-interface ILoginPayload {
-    email : string,
-    password : string
-}
 
-const register = async(payload : IRegisterPayload) => {
+const register = async(payload : IRegisterPatientPayload) => {
 
     const {name, email,password} = payload
 
@@ -90,7 +86,7 @@ const register = async(payload : IRegisterPayload) => {
 }
 
 
-const patientLogin = async(payload : ILoginPayload) => {
+const patientLogin = async(payload : ILoginUserPayload) => {
 
     const {email,password} = payload
 
@@ -141,7 +137,109 @@ const patientLogin = async(payload : ILoginPayload) => {
 
 
 
+const getMe = async (user : IRequestUser) => {
+    const isUserExists = await prisma.user.findUnique({
+        where : {
+            id : user.userId,
+        },
+        include : {
+            patient : {
+                include : {
+                    appointments : true,
+                    reviews : true,
+                    prescriptions : true,
+                    medicalReports : true,
+                    patientHealthData : true,
+                }
+            },
+            doctor : {
+                include : {
+                    specialties : true,
+                    appointments : true,
+                    reviews : true,
+                    prescriptions : true,
+                }
+            },
+            admin : true,
+        }
+    })
+
+    if (!isUserExists) {
+        throw new AppError(status.NOT_FOUND, "User not found");
+    }
+
+    return isUserExists;
+}
+
+const getNewToken = async (refreshToken : string, sessionToken : string) => {
+
+    const isSessionTokenExists = await prisma.session.findUnique({
+        where : {
+            token : sessionToken,
+        },
+        include : {
+            user : true,
+        }
+    })
+
+    if(!isSessionTokenExists){
+        throw new AppError(status.UNAUTHORIZED, "Invalid session token");
+    }
+
+    const verifiedRefreshToken = jwtUtils.verifyToken(refreshToken, envVars.REFRESH_TOKEN_SECRET)
+
+
+    if(!verifiedRefreshToken.success && verifiedRefreshToken.error){
+        throw new AppError(status.UNAUTHORIZED, "Invalid refresh token");
+    }
+
+    const data = verifiedRefreshToken.data as JwtPayload;
+
+    const newAccessToken = tokenUtils.getAccessToken({
+        userId: data.userId,
+        role: data.role,
+        name: data.name,
+        email: data.email,
+        status: data.status,
+        isDeleted: data.isDeleted,
+        emailVerified: data.emailVerified,
+    });
+
+    const newRefreshToken = tokenUtils.getRefreshToken({
+        userId: data.userId,
+        role: data.role,
+        name: data.name,
+        email: data.email,
+        status: data.status,
+        isDeleted: data.isDeleted,
+        emailVerified: data.emailVerified,
+    });
+
+    const {token} = await prisma.session.update({
+        where : {
+            token : sessionToken
+        },
+        data : {
+            token : sessionToken,
+            expiresAt: new Date(Date.now() + 60 * 60 * 60 * 24 * 1000),
+            updatedAt: new Date(),
+        }
+    })
+
+    return {
+        accessToken : newAccessToken,
+        refreshToken : newRefreshToken,
+        sessionToken : token,
+    }
+
+}
+
+
+
+
 export const authService = {
     register,
-    patientLogin
+    patientLogin,
+    getMe,
+    getNewToken
 }
