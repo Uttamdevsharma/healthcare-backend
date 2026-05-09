@@ -4,6 +4,7 @@ import { prisma } from "./prisma";
 import { Role, UserStatus } from "../../generated/prisma/enums";
 import { bearer, emailOTP } from "better-auth/plugins";
 import { sendEmail } from "../utils/email";
+import { envVars } from "../config/env";
 
 export const auth = betterAuth({
     database: prismaAdapter(prisma, {
@@ -13,6 +14,24 @@ export const auth = betterAuth({
     emailAndPassword : {
         enabled : true,
         requireEmailVerification: true,
+    },
+
+    socialProviders:{
+        google:{
+            clientId: envVars.GOOGLE_CLIENT_ID,
+            clientSecret: envVars.GOOGLE_CLIENT_SECRET,
+            // callbackUrl: envVars.GOOGLE_CALLBACK_URL,
+            mapProfileToUser: ()=>{
+                return {
+                    role : Role.PATIENT,
+                    status : UserStatus.ACTIVE,
+                    needPasswordChange : false,
+                    emailVerified : true,
+                    isDeleted : false,
+                    deletedAt : null,
+                }
+            }
+        }
     },
 
 
@@ -106,5 +125,35 @@ export const auth = betterAuth({
             enabled: true,
             maxAge: 60 * 60 * 60 * 24, // 1 day in seconds
         }
+    },
+
+    redirectURLs:{
+        signIn : `${envVars.BETTER_AUTH_URL}/api/v1/auth/google/success`,
+    },
+
+    trustedOrigins: [process.env.BETTER_AUTH_URL || "http://localhost:5000", envVars.FRONTEND_URL],
+
+    advanced: {
+        // disableCSRFCheck: true,
+        useSecureCookies : false,
+        cookies:{
+            state:{
+                attributes:{
+                    sameSite: "none",
+                    secure: true,
+                    httpOnly: true,
+                    path: "/",
+                }
+            },
+            sessionToken:{
+                attributes:{
+                    sameSite: "none",
+                    secure: true,
+                    httpOnly: true,
+                    path: "/",
+                }
+            }
+        }
     }
+
 });
