@@ -13,6 +13,7 @@ export const globalErrorHandler = async (err:any,req:Request,res:Response,next:N
     if(envVars.NODE_ENV === 'development'){
         console.log("Error from Global Error Handler",err)
     }
+    console.log("GLOBAL ERROR =>", err);
 
     if(req.file){
         await deleteFileFromCloudinary(req.file.path)
