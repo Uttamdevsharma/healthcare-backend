@@ -350,6 +350,16 @@ TInclude = Record<string, unknown>
         return this;
     }
 
+
+
+    async count() : Promise<number> {
+        return await this.model.count(this.countQuery as Parameters<typeof this.model.count>[0]);
+    }
+
+    getQuery() : PrismaFindManyArgs {
+        return this.query;
+    }
+
     private deepMerge(target : Record<string, unknown>, source : Record<string, unknown>) : Record<string, unknown> {
 
         const result = {...target};
