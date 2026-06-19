@@ -99,7 +99,8 @@ TInclude = Record<string, unknown>
 
         return this;
     }
-
+    // /doctors?searchTerm=john&page=1&sortBy=name&specialty=cardiology&appointmentFee[lt]=100 => {}
+    // { specialty: 'cardiology', appointmentFee: { lt: '100' } }
     filter() : this {
 
         const { filterableFields } = this.config;
@@ -273,7 +274,6 @@ TInclude = Record<string, unknown>
         return this;
     }
 
-
     fields() : this {
         const fieldsParam = this.queryParams.fields;
         // /doctors?fields=id,name,user => select: { id: true, name: true, user: { select: { name: true } } }
@@ -350,7 +350,6 @@ TInclude = Record<string, unknown>
         return this;
     }
 
-
     async execute() : Promise<IQueryResult<T>> {
         const [total, data] = await Promise.all([
             this.model.count(this.countQuery as Parameters<typeof this.model.count>[0]),
@@ -370,8 +369,6 @@ TInclude = Record<string, unknown>
         }
 
     }
-
-
 
     async count() : Promise<number> {
         return await this.model.count(this.countQuery as Parameters<typeof this.model.count>[0]);
@@ -398,8 +395,6 @@ TInclude = Record<string, unknown>
         }
         return result;
     }
-
-
 
     private parseFilterValue(value : unknown) : unknown {
 
@@ -460,8 +455,4 @@ TInclude = Record<string, unknown>
 
         return Object.keys(rangeQuery).length > 0 ? rangeQuery : value;
     }
-
-
-    
 }
-
