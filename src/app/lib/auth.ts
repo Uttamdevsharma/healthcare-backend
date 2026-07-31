@@ -1,18 +1,21 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { prisma } from "./prisma";
-import { Role, UserStatus } from "../../generated/prisma/enums";
 import { bearer, emailOTP } from "better-auth/plugins";
-import { sendEmail } from "../utils/email";
+import { Role, UserStatus } from "../../generated/prisma/enums";
 import { envVars } from "../config/env";
+import { sendEmail } from "../utils/email";
+import { prisma } from "./prisma";
+// If your Prisma file is located elsewhere, you can change the path
 
 export const auth = betterAuth({
+    baseURL: envVars.BETTER_AUTH_URL,
+    secret: envVars.BETTER_AUTH_SECRET,
     database: prismaAdapter(prisma, {
         provider: "postgresql", // or "mysql", "postgresql", ...etc
     }),
 
-    emailAndPassword : {
-        enabled : true,
+    emailAndPassword: {
+        enabled: true,
         requireEmailVerification: true,
     },
 
@@ -34,13 +37,11 @@ export const auth = betterAuth({
         }
     },
 
-
     emailVerification:{
         sendOnSignUp: true,
         sendOnSignIn: true,
         autoSignInAfterVerification: true,
     },
-
 
     user: {
         additionalFields: {
@@ -67,6 +68,12 @@ export const auth = betterAuth({
                 required: true,
                 defaultValue: false
             },
+
+            deletedAt: {
+                type: "date",
+                required: false,
+                defaultValue: null
+            },
         }
     },
 
@@ -81,8 +88,18 @@ export const auth = betterAuth({
                         email,
                     }
                   })
+
+                   if(!user){
+                    console.error(`User with email ${email} not found. Cannot send verification OTP.`);
+                    return;
+                   }
+
+                   if(user && user.role === Role.SUPER_ADMIN){
+                    console.log(`User with email ${email} is a super admin. Skipping sending verification OTP.`);
+                    return;
+                   }
                   
-                  if(user && !user.emailVerified){
+                    if (user && !user.emailVerified){
                     sendEmail({
                         to : email,
                         subject : "Verify your email",
