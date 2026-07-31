@@ -11,11 +11,20 @@ import { envVars } from "./app/config/env";
 import { toNodeHandler } from "better-auth/node";
 import { auth } from "./app/lib/auth";
 const app: Application = express();
-import qs from 'qs'
+import qs from "qs";
 
-app.set("query parser", (str : string) => qs.parse(str));
+app.set("query parser", (str: string) => qs.parse(str));
 app.set("view engine", "ejs");
 app.set("views", path.resolve(process.cwd(), `src/app/templates`));
+
+app.post(
+  "/webhook",
+  express.raw({ type: "application/json" }),
+  async (req: Request, res: Response) => {
+    console.log("webhook recieved", req.body);
+    res.status(200).json({recieved:true});
+  },
+);
 
 app.use(
   cors({
