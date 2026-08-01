@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import status from "http-status";
+import AppError from "../../errorHelpers/AppError";
 import { catchAsync } from "../../shared/catchAsync";
 import { sendResponse } from "../../shared/sendResponse";
 import { AppointmentService } from "./appointment.service";
@@ -64,6 +65,19 @@ const getAllAppointments = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+const getAppointmentByVideoCallId = catchAsync(async (req: Request, res: Response) => {
+    const videoCallingId = req.params.videoCallingId;
+    const user = req.user;
+
+    const appointment = await AppointmentService.getAppointmentByVideoCallId(videoCallingId as string, user);
+    sendResponse(res, {
+        success: true,
+        httpStatusCode: status.OK,
+        message: 'Appointment retrieved successfully',
+        data: appointment
+    });
+});
+
 const bookAppointmentWithPayLater = catchAsync(async (req: Request, res: Response) => {
     const payload = req.body;
     const user = req.user;
@@ -89,12 +103,32 @@ const initiatePayment = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+const verifyPayment = catchAsync(async (req: Request, res: Response) => {
+    const user = req.user;
+    const { appointmentId } = req.body;
+
+    if (!appointmentId) {
+        throw new AppError(status.BAD_REQUEST, 'appointmentId is required');
+    }
+
+    const appointment = await AppointmentService.verifyPayment(appointmentId, user);
+
+    sendResponse(res, {
+        success: true,
+        httpStatusCode: status.OK,
+        message: 'Payment verified successfully',
+        data: appointment
+    });
+});
+
 export const AppointmentController = {
     bookAppointment,
     getMyAppointments,
     changeAppointmentStatus,
     getMySingleAppointment,
     getAllAppointments,
+    getAppointmentByVideoCallId,
     bookAppointmentWithPayLater,
     initiatePayment,
+    verifyPayment,
 }

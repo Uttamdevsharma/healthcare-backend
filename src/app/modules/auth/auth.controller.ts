@@ -20,7 +20,9 @@ const register = catchAsync(
 
     tokenUtils.setAccessTokenCookie(res,accessToken)
     tokenUtils.setRefreshTokenCookie(res, refreshToken)
-    tokenUtils.setBetterAuthSessionCookie(res, token as string)
+    if (token) {
+        tokenUtils.setBetterAuthSessionCookie(res, token)
+    }
 
 
     sendResponse(res, {
@@ -47,7 +49,9 @@ const patientLogin = catchAsync(
 
         tokenUtils.setAccessTokenCookie(res,accessToken)
         tokenUtils.setRefreshTokenCookie(res, refreshToken)
-        tokenUtils.setBetterAuthSessionCookie(res, token)
+        if (token) {
+            tokenUtils.setBetterAuthSessionCookie(res, token)
+        }
 
         sendResponse(res, {
             httpStatusCode : status.OK,
@@ -66,7 +70,9 @@ const patientLogin = catchAsync(
 const getMe = catchAsync(
     async (req: Request, res: Response) => {
         const user = req.user;
-        console.log({user});
+        if (!user) {
+            throw new AppError(status.UNAUTHORIZED, "Unauthorized access! User not found.");
+        }
         const result = await authService.getMe(user);
         sendResponse(res, {
             httpStatusCode: status.OK,

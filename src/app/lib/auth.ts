@@ -31,7 +31,6 @@ export const auth = betterAuth({
                     needPasswordChange : false,
                     emailVerified : true,
                     isDeleted : false,
-                    deletedAt : null,
                 }
             }
         }
@@ -67,12 +66,6 @@ export const auth = betterAuth({
                 type: "boolean",
                 required: true,
                 defaultValue: false
-            },
-
-            deletedAt: {
-                type: "date",
-                required: false,
-                defaultValue: null
             },
         }
     },

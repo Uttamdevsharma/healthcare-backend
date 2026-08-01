@@ -99,10 +99,19 @@ const bookAppointment = async (
         paymentId: paymentData.id,
       },
 
-      success_url: `${envVars.FRONTEND_URL}/dashboard/payment/payment-success`,
+      success_url: `${envVars.FRONTEND_URL}/dashboard/payment/payment-success?appointment_id=${appointmentData.id}&payment_id=${paymentData.id}`,
 
       // cancel_url: `${envVars.FRONTEND_URL}/dashboard/payment/payment-failed`,
       cancel_url: `${envVars.FRONTEND_URL}/dashboard/appointments`,
+    });
+
+    await tx.payment.update({
+      where: {
+        id: paymentData.id,
+      },
+      data: {
+        paymentGatewayData: { checkoutSessionId: session.id },
+      },
     });
 
     return {
@@ -127,11 +136,13 @@ const getMyAppointments = async (user: IRequestUser) => {
     },
   });
 
-  const doctorData = await prisma.doctor.findUnique({
-    where: {
-      email: user?.email,
-    },
-  });
+  const doctorData = user?.email
+    ? await prisma.doctor.findUnique({
+        where: {
+          email: user.email,
+        },
+      })
+    : null;
 
   let appointments = [];
 
@@ -143,6 +154,11 @@ const getMyAppointments = async (user: IRequestUser) => {
       include: {
         doctor: true,
         schedule: true,
+        payment: true,
+        review: true,
+      },
+      orderBy: {
+        createdAt: "desc",
       },
     });
   } else if (doctorData) {
@@ -153,6 +169,11 @@ const getMyAppointments = async (user: IRequestUser) => {
       include: {
         patient: true,
         schedule: true,
+        payment: true,
+        review: true,
+      },
+      orderBy: {
+        createdAt: "desc",
       },
     });
   } else {
@@ -175,23 +196,72 @@ const changeAppointmentStatus = async (
   const appointmentData = await prisma.appointment.findUniqueOrThrow({
     where: {
       id: appointmentId,
-      // status: AppointmentStatus.SCHEDULED
     },
     include: {
       doctor: true,
+      patient: {
+        include: {
+          user: true,
+        },
+      },
     },
   });
 
-  // if (!appointmentData) {
-  //     throw new AppError(status.NOT_FOUND, "Appointment not found or already completed/cancelled");
-  // }
+  // Completed or Cancelled appointments should not be allowed to update status
+  if (
+    appointmentData.status === AppointmentStatus.COMPLETED ||
+    appointmentData.status === AppointmentStatus.CANCELED
+  ) {
+    throw new AppError(
+      status.BAD_REQUEST,
+      `Appointment is already ${appointmentData.status.toLowerCase()}. It cannot be updated`,
+    );
+  }
 
   if (user?.role === Role.DOCTOR) {
     if (!(user?.email === appointmentData.doctor.email))
       throw new AppError(status.BAD_REQUEST, "This is not your appointment");
+
+    // Doctors can go SCHEDULED -> INPROGRESS -> COMPLETED, or SCHEDULED -> CANCELED
+    const allowedDoctorTransitions: Record<string, AppointmentStatus[]> = {
+      [AppointmentStatus.SCHEDULED]: [
+        AppointmentStatus.INPROGRESS,
+        AppointmentStatus.CANCELED,
+      ],
+      [AppointmentStatus.INPROGRESS]: [AppointmentStatus.COMPLETED],
+    };
+
+    const allowedStatuses = allowedDoctorTransitions[appointmentData.status];
+
+    if (!allowedStatuses || !allowedStatuses.includes(appointmentStatus)) {
+      throw new AppError(
+        status.BAD_REQUEST,
+        `Doctor cannot change appointment status from ${appointmentData.status} to ${appointmentStatus}`,
+      );
+    }
   }
 
-  return await prisma.appointment.update({
+  if (user?.role === Role.PATIENT) {
+    if (!(appointmentData.patient.userId === user.userId))
+      throw new AppError(status.BAD_REQUEST, "This is not your appointment");
+
+    // Patients can only cancel a scheduled appointment
+    if (appointmentStatus !== AppointmentStatus.CANCELED) {
+      throw new AppError(
+        status.BAD_REQUEST,
+        "Patients can only cancel a scheduled appointment",
+      );
+    }
+
+    if (appointmentData.status !== AppointmentStatus.SCHEDULED) {
+      throw new AppError(
+        status.BAD_REQUEST,
+        "Patients can only cancel a scheduled appointment",
+      );
+    }
+  }
+
+  const updatedAppointment = await prisma.appointment.update({
     where: {
       id: appointmentId,
     },
@@ -199,6 +269,21 @@ const changeAppointmentStatus = async (
       status: appointmentStatus,
     },
   });
+
+  // Release the doctor schedule slot when the appointment is cancelled
+  if (appointmentStatus === AppointmentStatus.CANCELED) {
+    await prisma.doctorSchedules.updateMany({
+      where: {
+        doctorId: appointmentData.doctorId,
+        scheduleId: appointmentData.scheduleId,
+      },
+      data: {
+        isBooked: false,
+      },
+    });
+  }
+
+  return updatedAppointment;
 };
 
 // refactoring on include of doctor and patient data in appointment details, we can use query builder to get the data in single query instead of multiple queries in case of doctor and patient both
@@ -212,11 +297,13 @@ const getMySingleAppointment = async (
     },
   });
 
-  const doctorData = await prisma.doctor.findUnique({
-    where: {
-      email: user?.email,
-    },
-  });
+  const doctorData = user?.email
+    ? await prisma.doctor.findUnique({
+        where: {
+          email: user.email,
+        },
+      })
+    : null;
 
   let appointment;
 
@@ -251,6 +338,62 @@ const getMySingleAppointment = async (
   return appointment;
 };
 
+const getAppointmentByVideoCallId = async (
+  videoCallingId: string,
+  user: IRequestUser,
+) => {
+  const patientData = await prisma.patient.findUnique({
+    where: {
+      userId: user?.userId,
+    },
+  });
+
+  const doctorData = user?.email
+    ? await prisma.doctor.findUnique({
+        where: {
+          email: user.email,
+        },
+      })
+    : null;
+
+  let appointment;
+
+  if (patientData) {
+    appointment = await prisma.appointment.findFirst({
+      where: {
+        videoCallingId,
+        patientId: patientData.id,
+      },
+      include: {
+        doctor: true,
+        patient: true,
+        schedule: true,
+      },
+    });
+  } else if (doctorData) {
+    appointment = await prisma.appointment.findFirst({
+      where: {
+        videoCallingId,
+        doctorId: doctorData.id,
+      },
+      include: {
+        doctor: true,
+        patient: true,
+        schedule: true,
+      },
+    });
+  }
+
+  if (!appointment) {
+    throw new AppError(
+      status.NOT_FOUND,
+      "Appointment not found for this video call",
+    );
+  }
+
+  return appointment;
+};
+
 // integrate query builder
 const getAllAppointments = async () => {
   const appointments = await prisma.appointment.findMany({
@@ -258,6 +401,11 @@ const getAllAppointments = async () => {
       doctor: true,
       patient: true,
       schedule: true,
+      payment: true,
+      review: true,
+    },
+    orderBy: {
+      createdAt: "desc",
     },
   });
   return appointments;
@@ -338,8 +486,7 @@ const bookAppointmentWithPayLater = async (
   return result;
 };
 
-const initiatePayment = async (appointmentId: string, user: IRequestUser) => {
-  const patientData = await prisma.patient.findUniqueOrThrow({
+const initiatePayment = async (appointmentId: string, user: IRequestUser) => {  const patientData = await prisma.patient.findUniqueOrThrow({
     where: {
       userId: user.userId,
     },
@@ -404,9 +551,99 @@ const initiatePayment = async (appointmentId: string, user: IRequestUser) => {
     cancel_url: `${envVars.FRONTEND_URL}/dashboard/appointments?error=payment_cancelled`,
   });
 
+  await prisma.payment.update({
+    where: {
+      id: appointmentData.payment.id,
+    },
+    data: {
+      paymentGatewayData: { checkoutSessionId: session.id },
+    },
+  });
+
   return {
     paymentUrl: session.url,
   };
+};
+
+const verifyPayment = async (appointmentId: string, user: IRequestUser) => {
+  const patientData = await prisma.patient.findUnique({
+    where: {
+      userId: user.userId,
+    },
+  });
+
+  if (!patientData) {
+    throw new AppError(status.NOT_FOUND, "Patient not found");
+  }
+
+  const appointment = await prisma.appointment.findUnique({
+    where: {
+      id: appointmentId,
+    },
+    include: {
+      payment: true,
+    },
+  });
+
+  if (!appointment) {
+    throw new AppError(status.NOT_FOUND, "Appointment not found");
+  }
+
+  if (appointment.patientId !== patientData.id) {
+    throw new AppError(status.FORBIDDEN, "This appointment does not belong to you");
+  }
+
+  if (appointment.paymentStatus === PaymentStatus.PAID) {
+    return appointment;
+  }
+
+  const payment = appointment.payment;
+
+  if (!payment) {
+    throw new AppError(status.NOT_FOUND, "Payment data not found for this appointment");
+  }
+
+  const gatewayData = payment.paymentGatewayData as {
+    checkoutSessionId?: string;
+  } | null;
+
+  const checkoutSessionId = gatewayData?.checkoutSessionId;
+
+  if (!checkoutSessionId) {
+    throw new AppError(
+      status.BAD_REQUEST,
+      "No Stripe payment session found for this appointment",
+    );
+  }
+
+  const session = await stripe.checkout.sessions.retrieve(checkoutSessionId);
+
+  if (session.payment_status !== "paid") {
+    throw new AppError(status.BAD_REQUEST, "Payment is not completed yet");
+  }
+
+  await prisma.$transaction(async (tx) => {
+    await tx.appointment.update({
+      where: {
+        id: appointmentId,
+      },
+      data: {
+        paymentStatus: PaymentStatus.PAID,
+      },
+    });
+
+    await tx.payment.update({
+      where: {
+        id: payment.id,
+      },
+      data: {
+        status: PaymentStatus.PAID,
+        paymentGatewayData: session as any,
+      },
+    });
+  });
+
+  return appointment;
 };
 
 const cancelUnpaidAppointments = async () => {
@@ -468,7 +705,9 @@ export const AppointmentService = {
   changeAppointmentStatus,
   getMySingleAppointment,
   getAllAppointments,
+  getAppointmentByVideoCallId,
   bookAppointmentWithPayLater,
   initiatePayment,
+  verifyPayment,
   cancelUnpaidAppointments,
 };

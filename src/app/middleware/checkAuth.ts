@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { JwtPayload } from "jsonwebtoken";
 import status from "http-status";
 import { Role, UserStatus } from "../../generated/prisma/enums";
 import { envVars } from "../config/env";
@@ -9,12 +10,35 @@ import { jwtUtils } from "../utils/jwt";
 
 export const checkAuth = (...authRoles: Role[]) => async (req: Request, res: Response, next: NextFunction) => {
     try {
-        //Session Token Verification
-        const sessionToken = CookieUtils.getCookie(req, "better-auth.session_token");
+        //Access Token Verification (primary auth)
+        const accessToken = CookieUtils.getCookie(req, 'accessToken');
 
-        if (!sessionToken) {
-            throw new Error('Unauthorized access! No session token provided.');
+        if (!accessToken) {
+            throw new AppError(status.UNAUTHORIZED, 'Unauthorized access! No access token provided.');
         }
+
+        const verifiedToken = jwtUtils.verifyToken(accessToken, envVars.ACCESS_TOKEN_SECRET);
+
+        if (!verifiedToken.success || !verifiedToken.data) {
+            throw new AppError(status.UNAUTHORIZED, 'Unauthorized access! Invalid access token.');
+        }
+
+        const tokenData = verifiedToken.data as JwtPayload;
+
+        req.user = {
+            userId: tokenData.userId as string,
+            role: tokenData.role as Role,
+            email: tokenData.email as string,
+        };
+
+        if (authRoles.length > 0 && !authRoles.includes(req.user.role)) {
+            throw new AppError(status.FORBIDDEN, 'Forbidden access! You do not have permission to access this resource.');
+        }
+
+        //Session Token Verification (optional, used for status checks + refresh headers)
+        let userStatusChecked = false;
+
+        const sessionToken = CookieUtils.getCookie(req, "better-auth.session_token");
 
         if (sessionToken) {
             const sessionExists = await prisma.session.findFirst({
@@ -56,41 +80,34 @@ export const checkAuth = (...authRoles: Role[]) => async (req: Request, res: Res
                     throw new AppError(status.UNAUTHORIZED, 'Unauthorized access! User is deleted.');
                 }
 
-                if (authRoles.length > 0 && !authRoles.includes(user.role)) {
-                    throw new AppError(status.FORBIDDEN, 'Forbidden access! You do not have permission to access this resource.');
-                }
+                userStatusChecked = true;
+            }
+        }
 
-                req.user = {
-                    userId : user.id,
-                    role : user.role,
-                    email : user.email,
+        //Fall back to a direct user lookup when there is no valid better-auth session
+        //(e.g. right after registration, since sign-up doesn't create a session until the email is verified)
+        if (!userStatusChecked) {
+            const dbUser = await prisma.user.findUnique({
+                where: {
+                    id: req.user.userId,
+                },
+                select: {
+                    status: true,
+                    isDeleted: true,
                 }
+            })
+
+            if (!dbUser) {
+                throw new AppError(status.UNAUTHORIZED, 'Unauthorized access! User not found.');
             }
 
-            const accessToken = CookieUtils.getCookie(req, 'accessToken');
-
-            if (!accessToken) {
-                throw new AppError(status.UNAUTHORIZED, 'Unauthorized access! No access token provided.');
+            if (dbUser.status === UserStatus.BLOCKED || dbUser.status === UserStatus.DELETED) {
+                throw new AppError(status.UNAUTHORIZED, 'Unauthorized access! User is not active.');
             }
 
-
-        }
-
-        //Access Token Verification
-        const accessToken = CookieUtils.getCookie(req, 'accessToken');
-
-        if (!accessToken) {
-            throw new AppError(status.UNAUTHORIZED, 'Unauthorized access! No access token provided.');
-        }
-
-        const verifiedToken = jwtUtils.verifyToken(accessToken, envVars.ACCESS_TOKEN_SECRET);
-
-        if (!verifiedToken.success) {
-            throw new AppError(status.UNAUTHORIZED, 'Unauthorized access! Invalid access token.');
-        }
-
-        if (authRoles.length > 0 && !authRoles.includes(verifiedToken.data!.role as Role)) {
-            throw new AppError(status.FORBIDDEN, 'Forbidden access! You do not have permission to access this resource.');
+            if (dbUser.isDeleted) {
+                throw new AppError(status.UNAUTHORIZED, 'Unauthorized access! User is deleted.');
+            }
         }
 
         next()

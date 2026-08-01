@@ -6,6 +6,9 @@ import {
   IUpdatePatientProfilePayload,
 } from "./patient.interface";
 import { convertToDateTime } from "./patient.utils";
+import AppError from "../../errorHelpers/AppError";
+import status from "http-status";
+import { UserStatus } from "../../../generated/prisma/enums";
 
 const updateMyProfile = async (
   user: IRequestUser,
@@ -121,6 +124,75 @@ const updateMyProfile = async (
   return result;
 };
 
+const getAllPatients = async () => {
+  const patients = await prisma.patient.findMany({
+    where: { isDeleted: false },
+    include: { user: true },
+  });
+  return patients;
+};
+
+const getPatientById = async (id: string) => {
+  const patient = await prisma.patient.findUnique({
+    where: { id },
+    include: {
+      user: true,
+      patientHealthData: true,
+      medicalReports: true,
+    },
+  });
+
+  if (!patient) {
+    throw new AppError(status.NOT_FOUND, "Patient not found");
+  }
+
+  return patient;
+};
+
+const updatePatientStatus = async (id: string, payload: { status: UserStatus }) => {
+  const patient = await prisma.patient.findUnique({ where: { id } });
+  if (!patient) {
+    throw new AppError(status.NOT_FOUND, "Patient not found");
+  }
+
+  const updated = await prisma.user.update({
+    where: { id: patient.userId },
+    data: { status: payload.status },
+  });
+
+  return updated;
+};
+
+const deletePatient = async (id: string) => {
+  const patient = await prisma.patient.findUnique({ where: { id } });
+  if (!patient) {
+    throw new AppError(status.NOT_FOUND, "Patient not found");
+  }
+
+  const result = await prisma.$transaction(async (tx) => {
+    await tx.patient.update({
+      where: { id },
+      data: { isDeleted: true, deletedAt: new Date() },
+    });
+
+    await tx.user.update({
+      where: { id: patient.userId },
+      data: { isDeleted: true, deletedAt: new Date(), status: UserStatus.DELETED },
+    });
+
+    return await tx.patient.findUnique({
+      where: { id },
+      include: { user: true },
+    });
+  });
+
+  return result;
+};
+
 export const PatientService = {
   updateMyProfile,
+  getAllPatients,
+  getPatientById,
+  updatePatientStatus,
+  deletePatient,
 };

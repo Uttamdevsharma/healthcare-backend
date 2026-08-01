@@ -1,0 +1,2310 @@
+
+> healthcare-backend@1.0.0 dev
+> tsx watch src/server.ts
+
+◇ injected env (27) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+CLOUD NAME: dc1gjngnn
+API KEY: 693381927832864
+API SECRET: LlgkNbciplkUTyRAzy9jXAoDCRM
+(node:48984) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Super admin already exists. Skipping seeding super admin.
+Server is running on http://localhost:5000
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+Error from Global Error Handler PrismaClientKnownRequestError: 
+Invalid `prisma.user.findUnique()` invocation in
+F:\All Project\Healthcare\healthcare-backend\src\app\modules\auth\auth.service.ts:141:44
+
+  138 
+  139 
+  140 const getMe = async (user : IRequestUser) => {
+→ 141     const isUserExists = await prisma.user.findUnique(
+Server has closed the connection.
+    at Gr.handleRequestError (F:\All Project\Healthcare\healthcare-backend\node_modules\@prisma\client\src\runtime\RequestHandler.ts:237:13)
+    at Gr.handleAndLogRequestError (F:\All Project\Healthcare\healthcare-backend\node_modules\@prisma\client\src\runtime\RequestHandler.ts:183:12)
+    at Gr.request (F:\All Project\Healthcare\healthcare-backend\node_modules\@prisma\client\src\runtime\RequestHandler.ts:152:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async a (F:\All Project\Healthcare\healthcare-backend\node_modules\@prisma\client\src\runtime\getPrismaClient.ts:938:24)
+    at async Object.getMe (F:\All Project\Healthcare\healthcare-backend\src\app\modules\auth\auth.service.ts:141:26)
+    at async <anonymous> (F:\All Project\Healthcare\healthcare-backend\src\app\modules\auth\auth.controller.ts:70:24)
+    at async <anonymous> (F:\All Project\Healthcare\healthcare-backend\src\app\shared\catchAsync.ts:6:13) {
+  code: 'P1017',
+  meta: {
+    modelName: 'User',
+    driverAdapterError: DriverAdapterError: ConnectionClosed
+        at PrismaPgAdapter.onError (file:///F:/All%20Project/Healthcare/healthcare-backend/node_modules/@prisma/adapter-pg/dist/index.mjs:642:11)
+        at PrismaPgAdapter.performIO (file:///F:/All%20Project/Healthcare/healthcare-backend/node_modules/@prisma/adapter-pg/dist/index.mjs:637:12)
+        at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+        at async PrismaPgAdapter.queryRaw (file:///F:/All%20Project/Healthcare/healthcare-backend/node_modules/@prisma/adapter-pg/dist/index.mjs:568:30)
+        at async e.interpretNode (F:\All Project\Healthcare\healthcare-backend\node_modules\@prisma\client-engine-runtime\src\interpreter\query-interpreter.ts:186:26)
+        at async <anonymous> (F:\All Project\Healthcare\healthcare-backend\node_modules\@prisma\client-engine-runtime\src\interpreter\query-interpreter.ts:246:28)
+        at async Promise.all (index 4)
+        at async e.interpretNode (F:\All Project\Healthcare\healthcare-backend\node_modules\@prisma\client-engine-runtime\src\interpreter\query-interpreter.ts:243:26)
+        at async <anonymous> (F:\All Project\Healthcare\healthcare-backend\node_modules\@prisma\client-engine-runtime\src\interpreter\query-interpreter.ts:246:28)
+        at async Promise.all (index 0) {
+      cause: [Object]
+    }
+  },
+  clientVersion: '7.7.0'
+}
+GLOBAL ERROR => PrismaClientKnownRequestError: 
+Invalid `prisma.user.findUnique()` invocation in
+F:\All Project\Healthcare\healthcare-backend\src\app\modules\auth\auth.service.ts:141:44
+
+  138 
+  139 
+  140 const getMe = async (user : IRequestUser) => {
+→ 141     const isUserExists = await prisma.user.findUnique(
+Server has closed the connection.
+    at Gr.handleRequestError (F:\All Project\Healthcare\healthcare-backend\node_modules\@prisma\client\src\runtime\RequestHandler.ts:237:13)
+    at Gr.handleAndLogRequestError (F:\All Project\Healthcare\healthcare-backend\node_modules\@prisma\client\src\runtime\RequestHandler.ts:183:12)
+    at Gr.request (F:\All Project\Healthcare\healthcare-backend\node_modules\@prisma\client\src\runtime\RequestHandler.ts:152:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async a (F:\All Project\Healthcare\healthcare-backend\node_modules\@prisma\client\src\runtime\getPrismaClient.ts:938:24)
+    at async Object.getMe (F:\All Project\Healthcare\healthcare-backend\src\app\modules\auth\auth.service.ts:141:26)
+    at async <anonymous> (F:\All Project\Healthcare\healthcare-backend\src\app\modules\auth\auth.controller.ts:70:24)
+    at async <anonymous> (F:\All Project\Healthcare\healthcare-backend\src\app\shared\catchAsync.ts:6:13) {
+  code: 'P1017',
+  meta: {
+    modelName: 'User',
+    driverAdapterError: DriverAdapterError: ConnectionClosed
+        at PrismaPgAdapter.onError (file:///F:/All%20Project/Healthcare/healthcare-backend/node_modules/@prisma/adapter-pg/dist/index.mjs:642:11)
+        at PrismaPgAdapter.performIO (file:///F:/All%20Project/Healthcare/healthcare-backend/node_modules/@prisma/adapter-pg/dist/index.mjs:637:12)
+        at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+        at async PrismaPgAdapter.queryRaw (file:///F:/All%20Project/Healthcare/healthcare-backend/node_modules/@prisma/adapter-pg/dist/index.mjs:568:30)
+        at async e.interpretNode (F:\All Project\Healthcare\healthcare-backend\node_modules\@prisma\client-engine-runtime\src\interpreter\query-interpreter.ts:186:26)
+        at async <anonymous> (F:\All Project\Healthcare\healthcare-backend\node_modules\@prisma\client-engine-runtime\src\interpreter\query-interpreter.ts:246:28)
+        at async Promise.all (index 4)
+        at async e.interpretNode (F:\All Project\Healthcare\healthcare-backend\node_modules\@prisma\client-engine-runtime\src\interpreter\query-interpreter.ts:243:26)
+        at async <anonymous> (F:\All Project\Healthcare\healthcare-backend\node_modules\@prisma\client-engine-runtime\src\interpreter\query-interpreter.ts:246:28)
+        at async Promise.all (index 0) {
+      cause: [Object]
+    }
+  },
+  clientVersion: '7.7.0'
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  data: [
+    {
+      id: '019edf19-cce8-77bd-a293-d3a17414f119',
+      name: 'reday',
+      email: 'reday.doctor1@gmail.com',
+      profilePhoto: null,
+      contactNumber: '01712345678',
+      address: 'Rajshahi, Bangladesh',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: 'REG-1',
+      experience: 8,
+      gender: 'MALE',
+      appointmentFee: 500,
+      qualification: 'MBBS, FCPS',
+      currentWorkingPlace: 'Rajshahi Medical College Hospital',
+      designation: 'Senior Consultant',
+      averageRating: 0,
+      createdAt: 2026-06-19T08:57:50.568Z,
+      updatedAt: 2026-06-19T08:57:50.568Z,
+      userId: 'ruWqW4BzqP1ELmCPySYBDNO1aO7YQ59H',
+      user: [Object],
+      specialties: [Array]
+    },
+    {
+      id: '019df20b-60bc-7543-aee9-ad793b621e35',
+      name: 'Dr. Rahim Uddin',
+      email: 'rahim.doctor@gmail.com',
+      profilePhoto: null,
+      contactNumber: '01712345678',
+      address: 'Rajshahi, Bangladesh',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: 'REG-12345',
+      experience: 8,
+      gender: 'MALE',
+      appointmentFee: 500,
+      qualification: 'MBBS, FCPS',
+      currentWorkingPlace: 'Rajshahi Medical College Hospital',
+      designation: 'Senior Consultant',
+      averageRating: 0,
+      createdAt: 2026-05-04T08:12:05.181Z,
+      updatedAt: 2026-05-04T08:12:05.181Z,
+      userId: 'ewKgxdafb7cjTAC4WeE2zW3GRvkYAsqu',
+      user: [Object],
+      specialties: [Array]
+    },
+    {
+      id: '019db3d2-588c-7789-a6c6-cef7f04869de',
+      name: 'Dr. Rahim Hasan',
+      email: 'rahim.hasan@gmail.com',
+      profilePhoto: 'https://example.com/profile.jpg',
+      contactNumber: '01712345678',
+      address: 'Dhaka, Bangladesh',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: 'BMDC-56789',
+      experience: 8,
+      gender: 'MALE',
+      appointmentFee: 800,
+      qualification: 'MBBS, FCPS (Medicine)',
+      currentWorkingPlace: 'Square Hospital',
+      designation: 'Consultant Medicine Specialist',
+      averageRating: 0,
+      createdAt: 2026-04-22T06:13:20.141Z,
+      updatedAt: 2026-04-22T06:13:20.141Z,
+      userId: 'AtrKjTP4z2sKjYxeTxXnSVOzF6uF71ZS',
+      user: [Object],
+      specialties: [Array]
+    }
+  ],
+  meta: { page: 1, limit: 10, total: 3, totalPages: 1 }
+}
+{
+  data: [
+    {
+      id: '019edf19-cce8-77bd-a293-d3a17414f119',
+      name: 'reday',
+      email: 'reday.doctor1@gmail.com',
+      profilePhoto: null,
+      contactNumber: '01712345678',
+      address: 'Rajshahi, Bangladesh',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: 'REG-1',
+      experience: 8,
+      gender: 'MALE',
+      appointmentFee: 500,
+      qualification: 'MBBS, FCPS',
+      currentWorkingPlace: 'Rajshahi Medical College Hospital',
+      designation: 'Senior Consultant',
+      averageRating: 0,
+      createdAt: 2026-06-19T08:57:50.568Z,
+      updatedAt: 2026-06-19T08:57:50.568Z,
+      userId: 'ruWqW4BzqP1ELmCPySYBDNO1aO7YQ59H',
+      user: [Object],
+      specialties: [Array]
+    },
+    {
+      id: '019df20b-60bc-7543-aee9-ad793b621e35',
+      name: 'Dr. Rahim Uddin',
+      email: 'rahim.doctor@gmail.com',
+      profilePhoto: null,
+      contactNumber: '01712345678',
+      address: 'Rajshahi, Bangladesh',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: 'REG-12345',
+      experience: 8,
+      gender: 'MALE',
+      appointmentFee: 500,
+      qualification: 'MBBS, FCPS',
+      currentWorkingPlace: 'Rajshahi Medical College Hospital',
+      designation: 'Senior Consultant',
+      averageRating: 0,
+      createdAt: 2026-05-04T08:12:05.181Z,
+      updatedAt: 2026-05-04T08:12:05.181Z,
+      userId: 'ewKgxdafb7cjTAC4WeE2zW3GRvkYAsqu',
+      user: [Object],
+      specialties: [Array]
+    },
+    {
+      id: '019db3d2-588c-7789-a6c6-cef7f04869de',
+      name: 'Dr. Rahim Hasan',
+      email: 'rahim.hasan@gmail.com',
+      profilePhoto: 'https://example.com/profile.jpg',
+      contactNumber: '01712345678',
+      address: 'Dhaka, Bangladesh',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: 'BMDC-56789',
+      experience: 8,
+      gender: 'MALE',
+      appointmentFee: 800,
+      qualification: 'MBBS, FCPS (Medicine)',
+      currentWorkingPlace: 'Square Hospital',
+      designation: 'Consultant Medicine Specialist',
+      averageRating: 0,
+      createdAt: 2026-04-22T06:13:20.141Z,
+      updatedAt: 2026-04-22T06:13:20.141Z,
+      userId: 'AtrKjTP4z2sKjYxeTxXnSVOzF6uF71ZS',
+      user: [Object],
+      specialties: [Array]
+    }
+  ],
+  meta: { page: 1, limit: 10, total: 3, totalPages: 1 }
+}
+{
+  data: [
+    {
+      id: '019edf19-cce8-77bd-a293-d3a17414f119',
+      name: 'reday',
+      email: 'reday.doctor1@gmail.com',
+      profilePhoto: null,
+      contactNumber: '01712345678',
+      address: 'Rajshahi, Bangladesh',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: 'REG-1',
+      experience: 8,
+      gender: 'MALE',
+      appointmentFee: 500,
+      qualification: 'MBBS, FCPS',
+      currentWorkingPlace: 'Rajshahi Medical College Hospital',
+      designation: 'Senior Consultant',
+      averageRating: 0,
+      createdAt: 2026-06-19T08:57:50.568Z,
+      updatedAt: 2026-06-19T08:57:50.568Z,
+      userId: 'ruWqW4BzqP1ELmCPySYBDNO1aO7YQ59H',
+      user: [Object],
+      specialties: [Array]
+    },
+    {
+      id: '019df20b-60bc-7543-aee9-ad793b621e35',
+      name: 'Dr. Rahim Uddin',
+      email: 'rahim.doctor@gmail.com',
+      profilePhoto: null,
+      contactNumber: '01712345678',
+      address: 'Rajshahi, Bangladesh',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: 'REG-12345',
+      experience: 8,
+      gender: 'MALE',
+      appointmentFee: 500,
+      qualification: 'MBBS, FCPS',
+      currentWorkingPlace: 'Rajshahi Medical College Hospital',
+      designation: 'Senior Consultant',
+      averageRating: 0,
+      createdAt: 2026-05-04T08:12:05.181Z,
+      updatedAt: 2026-05-04T08:12:05.181Z,
+      userId: 'ewKgxdafb7cjTAC4WeE2zW3GRvkYAsqu',
+      user: [Object],
+      specialties: [Array]
+    },
+    {
+      id: '019db3d2-588c-7789-a6c6-cef7f04869de',
+      name: 'Dr. Rahim Hasan',
+      email: 'rahim.hasan@gmail.com',
+      profilePhoto: 'https://example.com/profile.jpg',
+      contactNumber: '01712345678',
+      address: 'Dhaka, Bangladesh',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: 'BMDC-56789',
+      experience: 8,
+      gender: 'MALE',
+      appointmentFee: 800,
+      qualification: 'MBBS, FCPS (Medicine)',
+      currentWorkingPlace: 'Square Hospital',
+      designation: 'Consultant Medicine Specialist',
+      averageRating: 0,
+      createdAt: 2026-04-22T06:13:20.141Z,
+      updatedAt: 2026-04-22T06:13:20.141Z,
+      userId: 'AtrKjTP4z2sKjYxeTxXnSVOzF6uF71ZS',
+      user: [Object],
+      specialties: [Array]
+    }
+  ],
+  meta: { page: 1, limit: 10, total: 3, totalPages: 1 }
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  data: [
+    {
+      id: '019edf19-cce8-77bd-a293-d3a17414f119',
+      name: 'reday',
+      email: 'reday.doctor1@gmail.com',
+      profilePhoto: null,
+      contactNumber: '01712345678',
+      address: 'Rajshahi, Bangladesh',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: 'REG-1',
+      experience: 8,
+      gender: 'MALE',
+      appointmentFee: 500,
+      qualification: 'MBBS, FCPS',
+      currentWorkingPlace: 'Rajshahi Medical College Hospital',
+      designation: 'Senior Consultant',
+      averageRating: 0,
+      createdAt: 2026-06-19T08:57:50.568Z,
+      updatedAt: 2026-06-19T08:57:50.568Z,
+      userId: 'ruWqW4BzqP1ELmCPySYBDNO1aO7YQ59H',
+      user: [Object],
+      specialties: [Array]
+    },
+    {
+      id: '019df20b-60bc-7543-aee9-ad793b621e35',
+      name: 'Dr. Rahim Uddin',
+      email: 'rahim.doctor@gmail.com',
+      profilePhoto: null,
+      contactNumber: '01712345678',
+      address: 'Rajshahi, Bangladesh',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: 'REG-12345',
+      experience: 8,
+      gender: 'MALE',
+      appointmentFee: 500,
+      qualification: 'MBBS, FCPS',
+      currentWorkingPlace: 'Rajshahi Medical College Hospital',
+      designation: 'Senior Consultant',
+      averageRating: 0,
+      createdAt: 2026-05-04T08:12:05.181Z,
+      updatedAt: 2026-05-04T08:12:05.181Z,
+      userId: 'ewKgxdafb7cjTAC4WeE2zW3GRvkYAsqu',
+      user: [Object],
+      specialties: [Array]
+    },
+    {
+      id: '019db3d2-588c-7789-a6c6-cef7f04869de',
+      name: 'Dr. Rahim Hasan',
+      email: 'rahim.hasan@gmail.com',
+      profilePhoto: 'https://example.com/profile.jpg',
+      contactNumber: '01712345678',
+      address: 'Dhaka, Bangladesh',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: 'BMDC-56789',
+      experience: 8,
+      gender: 'MALE',
+      appointmentFee: 800,
+      qualification: 'MBBS, FCPS (Medicine)',
+      currentWorkingPlace: 'Square Hospital',
+      designation: 'Consultant Medicine Specialist',
+      averageRating: 0,
+      createdAt: 2026-04-22T06:13:20.141Z,
+      updatedAt: 2026-04-22T06:13:20.141Z,
+      userId: 'AtrKjTP4z2sKjYxeTxXnSVOzF6uF71ZS',
+      user: [Object],
+      specialties: [Array]
+    }
+  ],
+  meta: { page: 1, limit: 10, total: 3, totalPages: 1 }
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  data: [
+    {
+      id: '019edf19-cce8-77bd-a293-d3a17414f119',
+      name: 'reday',
+      email: 'reday.doctor1@gmail.com',
+      profilePhoto: null,
+      contactNumber: '01712345678',
+      address: 'Rajshahi, Bangladesh',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: 'REG-1',
+      experience: 8,
+      gender: 'MALE',
+      appointmentFee: 500,
+      qualification: 'MBBS, FCPS',
+      currentWorkingPlace: 'Rajshahi Medical College Hospital',
+      designation: 'Senior Consultant',
+      averageRating: 0,
+      createdAt: 2026-06-19T08:57:50.568Z,
+      updatedAt: 2026-06-19T08:57:50.568Z,
+      userId: 'ruWqW4BzqP1ELmCPySYBDNO1aO7YQ59H',
+      user: [Object],
+      specialties: [Array]
+    },
+    {
+      id: '019df20b-60bc-7543-aee9-ad793b621e35',
+      name: 'Dr. Rahim Uddin',
+      email: 'rahim.doctor@gmail.com',
+      profilePhoto: null,
+      contactNumber: '01712345678',
+      address: 'Rajshahi, Bangladesh',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: 'REG-12345',
+      experience: 8,
+      gender: 'MALE',
+      appointmentFee: 500,
+      qualification: 'MBBS, FCPS',
+      currentWorkingPlace: 'Rajshahi Medical College Hospital',
+      designation: 'Senior Consultant',
+      averageRating: 0,
+      createdAt: 2026-05-04T08:12:05.181Z,
+      updatedAt: 2026-05-04T08:12:05.181Z,
+      userId: 'ewKgxdafb7cjTAC4WeE2zW3GRvkYAsqu',
+      user: [Object],
+      specialties: [Array]
+    },
+    {
+      id: '019db3d2-588c-7789-a6c6-cef7f04869de',
+      name: 'Dr. Rahim Hasan',
+      email: 'rahim.hasan@gmail.com',
+      profilePhoto: 'https://example.com/profile.jpg',
+      contactNumber: '01712345678',
+      address: 'Dhaka, Bangladesh',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: 'BMDC-56789',
+      experience: 8,
+      gender: 'MALE',
+      appointmentFee: 800,
+      qualification: 'MBBS, FCPS (Medicine)',
+      currentWorkingPlace: 'Square Hospital',
+      designation: 'Consultant Medicine Specialist',
+      averageRating: 0,
+      createdAt: 2026-04-22T06:13:20.141Z,
+      updatedAt: 2026-04-22T06:13:20.141Z,
+      userId: 'AtrKjTP4z2sKjYxeTxXnSVOzF6uF71ZS',
+      user: [Object],
+      specialties: [Array]
+    }
+  ],
+  meta: { page: 1, limit: 10, total: 3, totalPages: 1 }
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  data: [
+    {
+      id: '019edf19-cce8-77bd-a293-d3a17414f119',
+      name: 'reday',
+      email: 'reday.doctor1@gmail.com',
+      profilePhoto: null,
+      contactNumber: '01712345678',
+      address: 'Rajshahi, Bangladesh',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: 'REG-1',
+      experience: 8,
+      gender: 'MALE',
+      appointmentFee: 500,
+      qualification: 'MBBS, FCPS',
+      currentWorkingPlace: 'Rajshahi Medical College Hospital',
+      designation: 'Senior Consultant',
+      averageRating: 0,
+      createdAt: 2026-06-19T08:57:50.568Z,
+      updatedAt: 2026-06-19T08:57:50.568Z,
+      userId: 'ruWqW4BzqP1ELmCPySYBDNO1aO7YQ59H',
+      user: [Object],
+      specialties: [Array]
+    },
+    {
+      id: '019df20b-60bc-7543-aee9-ad793b621e35',
+      name: 'Dr. Rahim Uddin',
+      email: 'rahim.doctor@gmail.com',
+      profilePhoto: null,
+      contactNumber: '01712345678',
+      address: 'Rajshahi, Bangladesh',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: 'REG-12345',
+      experience: 8,
+      gender: 'MALE',
+      appointmentFee: 500,
+      qualification: 'MBBS, FCPS',
+      currentWorkingPlace: 'Rajshahi Medical College Hospital',
+      designation: 'Senior Consultant',
+      averageRating: 0,
+      createdAt: 2026-05-04T08:12:05.181Z,
+      updatedAt: 2026-05-04T08:12:05.181Z,
+      userId: 'ewKgxdafb7cjTAC4WeE2zW3GRvkYAsqu',
+      user: [Object],
+      specialties: [Array]
+    },
+    {
+      id: '019db3d2-588c-7789-a6c6-cef7f04869de',
+      name: 'Dr. Rahim Hasan',
+      email: 'rahim.hasan@gmail.com',
+      profilePhoto: 'https://example.com/profile.jpg',
+      contactNumber: '01712345678',
+      address: 'Dhaka, Bangladesh',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: 'BMDC-56789',
+      experience: 8,
+      gender: 'MALE',
+      appointmentFee: 800,
+      qualification: 'MBBS, FCPS (Medicine)',
+      currentWorkingPlace: 'Square Hospital',
+      designation: 'Consultant Medicine Specialist',
+      averageRating: 0,
+      createdAt: 2026-04-22T06:13:20.141Z,
+      updatedAt: 2026-04-22T06:13:20.141Z,
+      userId: 'AtrKjTP4z2sKjYxeTxXnSVOzF6uF71ZS',
+      user: [Object],
+      specialties: [Array]
+    }
+  ],
+  meta: { page: 1, limit: 10, total: 3, totalPages: 1 }
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  data: [
+    {
+      id: '019edf19-cce8-77bd-a293-d3a17414f119',
+      name: 'reday',
+      email: 'reday.doctor1@gmail.com',
+      profilePhoto: null,
+      contactNumber: '01712345678',
+      address: 'Rajshahi, Bangladesh',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: 'REG-1',
+      experience: 8,
+      gender: 'MALE',
+      appointmentFee: 500,
+      qualification: 'MBBS, FCPS',
+      currentWorkingPlace: 'Rajshahi Medical College Hospital',
+      designation: 'Senior Consultant',
+      averageRating: 0,
+      createdAt: 2026-06-19T08:57:50.568Z,
+      updatedAt: 2026-06-19T08:57:50.568Z,
+      userId: 'ruWqW4BzqP1ELmCPySYBDNO1aO7YQ59H',
+      user: [Object],
+      specialties: [Array]
+    },
+    {
+      id: '019df20b-60bc-7543-aee9-ad793b621e35',
+      name: 'Dr. Rahim Uddin',
+      email: 'rahim.doctor@gmail.com',
+      profilePhoto: null,
+      contactNumber: '01712345678',
+      address: 'Rajshahi, Bangladesh',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: 'REG-12345',
+      experience: 8,
+      gender: 'MALE',
+      appointmentFee: 500,
+      qualification: 'MBBS, FCPS',
+      currentWorkingPlace: 'Rajshahi Medical College Hospital',
+      designation: 'Senior Consultant',
+      averageRating: 0,
+      createdAt: 2026-05-04T08:12:05.181Z,
+      updatedAt: 2026-05-04T08:12:05.181Z,
+      userId: 'ewKgxdafb7cjTAC4WeE2zW3GRvkYAsqu',
+      user: [Object],
+      specialties: [Array]
+    },
+    {
+      id: '019db3d2-588c-7789-a6c6-cef7f04869de',
+      name: 'Dr. Rahim Hasan',
+      email: 'rahim.hasan@gmail.com',
+      profilePhoto: 'https://example.com/profile.jpg',
+      contactNumber: '01712345678',
+      address: 'Dhaka, Bangladesh',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: 'BMDC-56789',
+      experience: 8,
+      gender: 'MALE',
+      appointmentFee: 800,
+      qualification: 'MBBS, FCPS (Medicine)',
+      currentWorkingPlace: 'Square Hospital',
+      designation: 'Consultant Medicine Specialist',
+      averageRating: 0,
+      createdAt: 2026-04-22T06:13:20.141Z,
+      updatedAt: 2026-04-22T06:13:20.141Z,
+      userId: 'AtrKjTP4z2sKjYxeTxXnSVOzF6uF71ZS',
+      user: [Object],
+      specialties: [Array]
+    }
+  ],
+  meta: { page: 1, limit: 10, total: 3, totalPages: 1 }
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  data: [
+    {
+      id: '019edf19-cce8-77bd-a293-d3a17414f119',
+      name: 'reday',
+      email: 'reday.doctor1@gmail.com',
+      profilePhoto: null,
+      contactNumber: '01712345678',
+      address: 'Rajshahi, Bangladesh',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: 'REG-1',
+      experience: 8,
+      gender: 'MALE',
+      appointmentFee: 500,
+      qualification: 'MBBS, FCPS',
+      currentWorkingPlace: 'Rajshahi Medical College Hospital',
+      designation: 'Senior Consultant',
+      averageRating: 0,
+      createdAt: 2026-06-19T08:57:50.568Z,
+      updatedAt: 2026-06-19T08:57:50.568Z,
+      userId: 'ruWqW4BzqP1ELmCPySYBDNO1aO7YQ59H',
+      user: [Object],
+      specialties: [Array]
+    },
+    {
+      id: '019df20b-60bc-7543-aee9-ad793b621e35',
+      name: 'Dr. Rahim Uddin',
+      email: 'rahim.doctor@gmail.com',
+      profilePhoto: null,
+      contactNumber: '01712345678',
+      address: 'Rajshahi, Bangladesh',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: 'REG-12345',
+      experience: 8,
+      gender: 'MALE',
+      appointmentFee: 500,
+      qualification: 'MBBS, FCPS',
+      currentWorkingPlace: 'Rajshahi Medical College Hospital',
+      designation: 'Senior Consultant',
+      averageRating: 0,
+      createdAt: 2026-05-04T08:12:05.181Z,
+      updatedAt: 2026-05-04T08:12:05.181Z,
+      userId: 'ewKgxdafb7cjTAC4WeE2zW3GRvkYAsqu',
+      user: [Object],
+      specialties: [Array]
+    },
+    {
+      id: '019db3d2-588c-7789-a6c6-cef7f04869de',
+      name: 'Dr. Rahim Hasan',
+      email: 'rahim.hasan@gmail.com',
+      profilePhoto: 'https://example.com/profile.jpg',
+      contactNumber: '01712345678',
+      address: 'Dhaka, Bangladesh',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: 'BMDC-56789',
+      experience: 8,
+      gender: 'MALE',
+      appointmentFee: 800,
+      qualification: 'MBBS, FCPS (Medicine)',
+      currentWorkingPlace: 'Square Hospital',
+      designation: 'Consultant Medicine Specialist',
+      averageRating: 0,
+      createdAt: 2026-04-22T06:13:20.141Z,
+      updatedAt: 2026-04-22T06:13:20.141Z,
+      userId: 'AtrKjTP4z2sKjYxeTxXnSVOzF6uF71ZS',
+      user: [Object],
+      specialties: [Array]
+    }
+  ],
+  meta: { page: 1, limit: 10, total: 3, totalPages: 1 }
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  data: [
+    {
+      id: '019edf19-cce8-77bd-a293-d3a17414f119',
+      name: 'reday',
+      email: 'reday.doctor1@gmail.com',
+      profilePhoto: null,
+      contactNumber: '01712345678',
+      address: 'Rajshahi, Bangladesh',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: 'REG-1',
+      experience: 8,
+      gender: 'MALE',
+      appointmentFee: 500,
+      qualification: 'MBBS, FCPS',
+      currentWorkingPlace: 'Rajshahi Medical College Hospital',
+      designation: 'Senior Consultant',
+      averageRating: 0,
+      createdAt: 2026-06-19T08:57:50.568Z,
+      updatedAt: 2026-06-19T08:57:50.568Z,
+      userId: 'ruWqW4BzqP1ELmCPySYBDNO1aO7YQ59H',
+      user: [Object],
+      specialties: [Array]
+    },
+    {
+      id: '019df20b-60bc-7543-aee9-ad793b621e35',
+      name: 'Dr. Rahim Uddin',
+      email: 'rahim.doctor@gmail.com',
+      profilePhoto: null,
+      contactNumber: '01712345678',
+      address: 'Rajshahi, Bangladesh',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: 'REG-12345',
+      experience: 8,
+      gender: 'MALE',
+      appointmentFee: 500,
+      qualification: 'MBBS, FCPS',
+      currentWorkingPlace: 'Rajshahi Medical College Hospital',
+      designation: 'Senior Consultant',
+      averageRating: 0,
+      createdAt: 2026-05-04T08:12:05.181Z,
+      updatedAt: 2026-05-04T08:12:05.181Z,
+      userId: 'ewKgxdafb7cjTAC4WeE2zW3GRvkYAsqu',
+      user: [Object],
+      specialties: [Array]
+    },
+    {
+      id: '019db3d2-588c-7789-a6c6-cef7f04869de',
+      name: 'Dr. Rahim Hasan',
+      email: 'rahim.hasan@gmail.com',
+      profilePhoto: 'https://example.com/profile.jpg',
+      contactNumber: '01712345678',
+      address: 'Dhaka, Bangladesh',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: 'BMDC-56789',
+      experience: 8,
+      gender: 'MALE',
+      appointmentFee: 800,
+      qualification: 'MBBS, FCPS (Medicine)',
+      currentWorkingPlace: 'Square Hospital',
+      designation: 'Consultant Medicine Specialist',
+      averageRating: 0,
+      createdAt: 2026-04-22T06:13:20.141Z,
+      updatedAt: 2026-04-22T06:13:20.141Z,
+      userId: 'AtrKjTP4z2sKjYxeTxXnSVOzF6uF71ZS',
+      user: [Object],
+      specialties: [Array]
+    }
+  ],
+  meta: { page: 1, limit: 10, total: 3, totalPages: 1 }
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  data: [
+    {
+      id: '019edf19-cce8-77bd-a293-d3a17414f119',
+      name: 'reday',
+      email: 'reday.doctor1@gmail.com',
+      profilePhoto: null,
+      contactNumber: '01712345678',
+      address: 'Rajshahi, Bangladesh',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: 'REG-1',
+      experience: 8,
+      gender: 'MALE',
+      appointmentFee: 500,
+      qualification: 'MBBS, FCPS',
+      currentWorkingPlace: 'Rajshahi Medical College Hospital',
+      designation: 'Senior Consultant',
+      averageRating: 0,
+      createdAt: 2026-06-19T08:57:50.568Z,
+      updatedAt: 2026-06-19T08:57:50.568Z,
+      userId: 'ruWqW4BzqP1ELmCPySYBDNO1aO7YQ59H',
+      user: [Object],
+      specialties: [Array]
+    },
+    {
+      id: '019df20b-60bc-7543-aee9-ad793b621e35',
+      name: 'Dr. Rahim Uddin',
+      email: 'rahim.doctor@gmail.com',
+      profilePhoto: null,
+      contactNumber: '01712345678',
+      address: 'Rajshahi, Bangladesh',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: 'REG-12345',
+      experience: 8,
+      gender: 'MALE',
+      appointmentFee: 500,
+      qualification: 'MBBS, FCPS',
+      currentWorkingPlace: 'Rajshahi Medical College Hospital',
+      designation: 'Senior Consultant',
+      averageRating: 0,
+      createdAt: 2026-05-04T08:12:05.181Z,
+      updatedAt: 2026-05-04T08:12:05.181Z,
+      userId: 'ewKgxdafb7cjTAC4WeE2zW3GRvkYAsqu',
+      user: [Object],
+      specialties: [Array]
+    },
+    {
+      id: '019db3d2-588c-7789-a6c6-cef7f04869de',
+      name: 'Dr. Rahim Hasan',
+      email: 'rahim.hasan@gmail.com',
+      profilePhoto: 'https://example.com/profile.jpg',
+      contactNumber: '01712345678',
+      address: 'Dhaka, Bangladesh',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: 'BMDC-56789',
+      experience: 8,
+      gender: 'MALE',
+      appointmentFee: 800,
+      qualification: 'MBBS, FCPS (Medicine)',
+      currentWorkingPlace: 'Square Hospital',
+      designation: 'Consultant Medicine Specialist',
+      averageRating: 0,
+      createdAt: 2026-04-22T06:13:20.141Z,
+      updatedAt: 2026-04-22T06:13:20.141Z,
+      userId: 'AtrKjTP4z2sKjYxeTxXnSVOzF6uF71ZS',
+      user: [Object],
+      specialties: [Array]
+    }
+  ],
+  meta: { page: 1, limit: 10, total: 3, totalPages: 1 }
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+Email sent to tanvir@gmail.com : <6055d34d-f7e7-d114-10e4-1ddf259b145e@gmail.com>
+{
+  data: [
+    {
+      id: '019fb934-7bde-7229-8dc9-e55a29a5c091',
+      name: 'Dr. Tanvir',
+      email: 'tanvir@gmail.com',
+      profilePhoto: null,
+      contactNumber: '01701560325',
+      address: 'mirupur 12',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: '12345',
+      experience: 2,
+      gender: 'MALE',
+      appointmentFee: 800,
+      qualification: 'MBBS, FCPS',
+      currentWorkingPlace: 'Dhaka Medical College Hospital',
+      designation: 'Assistant professor',
+      averageRating: 0,
+      createdAt: 2026-07-31T17:24:12.384Z,
+      updatedAt: 2026-07-31T17:24:12.384Z,
+      userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+      user: [Object],
+      specialties: [Array]
+    },
+    {
+      id: '019edf19-cce8-77bd-a293-d3a17414f119',
+      name: 'reday',
+      email: 'reday.doctor1@gmail.com',
+      profilePhoto: null,
+      contactNumber: '01712345678',
+      address: 'Rajshahi, Bangladesh',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: 'REG-1',
+      experience: 8,
+      gender: 'MALE',
+      appointmentFee: 500,
+      qualification: 'MBBS, FCPS',
+      currentWorkingPlace: 'Rajshahi Medical College Hospital',
+      designation: 'Senior Consultant',
+      averageRating: 0,
+      createdAt: 2026-06-19T08:57:50.568Z,
+      updatedAt: 2026-06-19T08:57:50.568Z,
+      userId: 'ruWqW4BzqP1ELmCPySYBDNO1aO7YQ59H',
+      user: [Object],
+      specialties: [Array]
+    },
+    {
+      id: '019df20b-60bc-7543-aee9-ad793b621e35',
+      name: 'Dr. Rahim Uddin',
+      email: 'rahim.doctor@gmail.com',
+      profilePhoto: null,
+      contactNumber: '01712345678',
+      address: 'Rajshahi, Bangladesh',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: 'REG-12345',
+      experience: 8,
+      gender: 'MALE',
+      appointmentFee: 500,
+      qualification: 'MBBS, FCPS',
+      currentWorkingPlace: 'Rajshahi Medical College Hospital',
+      designation: 'Senior Consultant',
+      averageRating: 0,
+      createdAt: 2026-05-04T08:12:05.181Z,
+      updatedAt: 2026-05-04T08:12:05.181Z,
+      userId: 'ewKgxdafb7cjTAC4WeE2zW3GRvkYAsqu',
+      user: [Object],
+      specialties: [Array]
+    },
+    {
+      id: '019db3d2-588c-7789-a6c6-cef7f04869de',
+      name: 'Dr. Rahim Hasan',
+      email: 'rahim.hasan@gmail.com',
+      profilePhoto: 'https://example.com/profile.jpg',
+      contactNumber: '01712345678',
+      address: 'Dhaka, Bangladesh',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: 'BMDC-56789',
+      experience: 8,
+      gender: 'MALE',
+      appointmentFee: 800,
+      qualification: 'MBBS, FCPS (Medicine)',
+      currentWorkingPlace: 'Square Hospital',
+      designation: 'Consultant Medicine Specialist',
+      averageRating: 0,
+      createdAt: 2026-04-22T06:13:20.141Z,
+      updatedAt: 2026-04-22T06:13:20.141Z,
+      userId: 'AtrKjTP4z2sKjYxeTxXnSVOzF6uF71ZS',
+      user: [Object],
+      specialties: [Array]
+    }
+  ],
+  meta: { page: 1, limit: 10, total: 4, totalPages: 1 }
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  data: [
+    {
+      id: '019fb934-7bde-7229-8dc9-e55a29a5c091',
+      name: 'Dr. Tanvir',
+      email: 'tanvir@gmail.com',
+      profilePhoto: null,
+      contactNumber: '01701560325',
+      address: 'mirupur 12',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: '12345',
+      experience: 2,
+      gender: 'MALE',
+      appointmentFee: 800,
+      qualification: 'MBBS, FCPS',
+      currentWorkingPlace: 'Dhaka Medical College Hospital',
+      designation: 'Assistant professor',
+      averageRating: 0,
+      createdAt: 2026-07-31T17:24:12.384Z,
+      updatedAt: 2026-07-31T17:24:12.384Z,
+      userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+      user: [Object],
+      specialties: [Array]
+    },
+    {
+      id: '019edf19-cce8-77bd-a293-d3a17414f119',
+      name: 'reday',
+      email: 'reday.doctor1@gmail.com',
+      profilePhoto: null,
+      contactNumber: '01712345678',
+      address: 'Rajshahi, Bangladesh',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: 'REG-1',
+      experience: 8,
+      gender: 'MALE',
+      appointmentFee: 500,
+      qualification: 'MBBS, FCPS',
+      currentWorkingPlace: 'Rajshahi Medical College Hospital',
+      designation: 'Senior Consultant',
+      averageRating: 0,
+      createdAt: 2026-06-19T08:57:50.568Z,
+      updatedAt: 2026-06-19T08:57:50.568Z,
+      userId: 'ruWqW4BzqP1ELmCPySYBDNO1aO7YQ59H',
+      user: [Object],
+      specialties: [Array]
+    },
+    {
+      id: '019df20b-60bc-7543-aee9-ad793b621e35',
+      name: 'Dr. Rahim Uddin',
+      email: 'rahim.doctor@gmail.com',
+      profilePhoto: null,
+      contactNumber: '01712345678',
+      address: 'Rajshahi, Bangladesh',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: 'REG-12345',
+      experience: 8,
+      gender: 'MALE',
+      appointmentFee: 500,
+      qualification: 'MBBS, FCPS',
+      currentWorkingPlace: 'Rajshahi Medical College Hospital',
+      designation: 'Senior Consultant',
+      averageRating: 0,
+      createdAt: 2026-05-04T08:12:05.181Z,
+      updatedAt: 2026-05-04T08:12:05.181Z,
+      userId: 'ewKgxdafb7cjTAC4WeE2zW3GRvkYAsqu',
+      user: [Object],
+      specialties: [Array]
+    },
+    {
+      id: '019db3d2-588c-7789-a6c6-cef7f04869de',
+      name: 'Dr. Rahim Hasan',
+      email: 'rahim.hasan@gmail.com',
+      profilePhoto: 'https://example.com/profile.jpg',
+      contactNumber: '01712345678',
+      address: 'Dhaka, Bangladesh',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: 'BMDC-56789',
+      experience: 8,
+      gender: 'MALE',
+      appointmentFee: 800,
+      qualification: 'MBBS, FCPS (Medicine)',
+      currentWorkingPlace: 'Square Hospital',
+      designation: 'Consultant Medicine Specialist',
+      averageRating: 0,
+      createdAt: 2026-04-22T06:13:20.141Z,
+      updatedAt: 2026-04-22T06:13:20.141Z,
+      userId: 'AtrKjTP4z2sKjYxeTxXnSVOzF6uF71ZS',
+      user: [Object],
+      specialties: [Array]
+    }
+  ],
+  meta: { page: 1, limit: 10, total: 4, totalPages: 1 }
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  data: [
+    {
+      id: '019fb934-7bde-7229-8dc9-e55a29a5c091',
+      name: 'Dr. Tanvir',
+      email: 'tanvir@gmail.com',
+      profilePhoto: null,
+      contactNumber: '01701560325',
+      address: 'mirupur 12',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: '12345',
+      experience: 2,
+      gender: 'MALE',
+      appointmentFee: 800,
+      qualification: 'MBBS, FCPS',
+      currentWorkingPlace: 'Dhaka Medical College Hospital',
+      designation: 'Assistant professor',
+      averageRating: 0,
+      createdAt: 2026-07-31T17:24:12.384Z,
+      updatedAt: 2026-07-31T17:24:12.384Z,
+      userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+      user: [Object],
+      specialties: [Array]
+    },
+    {
+      id: '019edf19-cce8-77bd-a293-d3a17414f119',
+      name: 'reday',
+      email: 'reday.doctor1@gmail.com',
+      profilePhoto: null,
+      contactNumber: '01712345678',
+      address: 'Rajshahi, Bangladesh',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: 'REG-1',
+      experience: 8,
+      gender: 'MALE',
+      appointmentFee: 500,
+      qualification: 'MBBS, FCPS',
+      currentWorkingPlace: 'Rajshahi Medical College Hospital',
+      designation: 'Senior Consultant',
+      averageRating: 0,
+      createdAt: 2026-06-19T08:57:50.568Z,
+      updatedAt: 2026-06-19T08:57:50.568Z,
+      userId: 'ruWqW4BzqP1ELmCPySYBDNO1aO7YQ59H',
+      user: [Object],
+      specialties: [Array]
+    },
+    {
+      id: '019df20b-60bc-7543-aee9-ad793b621e35',
+      name: 'Dr. Rahim Uddin',
+      email: 'rahim.doctor@gmail.com',
+      profilePhoto: null,
+      contactNumber: '01712345678',
+      address: 'Rajshahi, Bangladesh',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: 'REG-12345',
+      experience: 8,
+      gender: 'MALE',
+      appointmentFee: 500,
+      qualification: 'MBBS, FCPS',
+      currentWorkingPlace: 'Rajshahi Medical College Hospital',
+      designation: 'Senior Consultant',
+      averageRating: 0,
+      createdAt: 2026-05-04T08:12:05.181Z,
+      updatedAt: 2026-05-04T08:12:05.181Z,
+      userId: 'ewKgxdafb7cjTAC4WeE2zW3GRvkYAsqu',
+      user: [Object],
+      specialties: [Array]
+    },
+    {
+      id: '019db3d2-588c-7789-a6c6-cef7f04869de',
+      name: 'Dr. Rahim Hasan',
+      email: 'rahim.hasan@gmail.com',
+      profilePhoto: 'https://example.com/profile.jpg',
+      contactNumber: '01712345678',
+      address: 'Dhaka, Bangladesh',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: 'BMDC-56789',
+      experience: 8,
+      gender: 'MALE',
+      appointmentFee: 800,
+      qualification: 'MBBS, FCPS (Medicine)',
+      currentWorkingPlace: 'Square Hospital',
+      designation: 'Consultant Medicine Specialist',
+      averageRating: 0,
+      createdAt: 2026-04-22T06:13:20.141Z,
+      updatedAt: 2026-04-22T06:13:20.141Z,
+      userId: 'AtrKjTP4z2sKjYxeTxXnSVOzF6uF71ZS',
+      user: [Object],
+      specialties: [Array]
+    }
+  ],
+  meta: { page: 1, limit: 10, total: 4, totalPages: 1 }
+}
+Running cron job to cancel unpaid appointments...
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  data: [
+    {
+      id: '019fb934-7bde-7229-8dc9-e55a29a5c091',
+      name: 'Dr. Tanvir',
+      email: 'tanvir@gmail.com',
+      profilePhoto: null,
+      contactNumber: '01701560325',
+      address: 'mirupur 12',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: '12345',
+      experience: 2,
+      gender: 'MALE',
+      appointmentFee: 800,
+      qualification: 'MBBS, FCPS',
+      currentWorkingPlace: 'Dhaka Medical College Hospital',
+      designation: 'Assistant professor',
+      averageRating: 0,
+      createdAt: 2026-07-31T17:24:12.384Z,
+      updatedAt: 2026-07-31T17:24:12.384Z,
+      userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+      user: [Object],
+      specialties: [Array]
+    },
+    {
+      id: '019edf19-cce8-77bd-a293-d3a17414f119',
+      name: 'reday',
+      email: 'reday.doctor1@gmail.com',
+      profilePhoto: null,
+      contactNumber: '01712345678',
+      address: 'Rajshahi, Bangladesh',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: 'REG-1',
+      experience: 8,
+      gender: 'MALE',
+      appointmentFee: 500,
+      qualification: 'MBBS, FCPS',
+      currentWorkingPlace: 'Rajshahi Medical College Hospital',
+      designation: 'Senior Consultant',
+      averageRating: 0,
+      createdAt: 2026-06-19T08:57:50.568Z,
+      updatedAt: 2026-06-19T08:57:50.568Z,
+      userId: 'ruWqW4BzqP1ELmCPySYBDNO1aO7YQ59H',
+      user: [Object],
+      specialties: [Array]
+    },
+    {
+      id: '019df20b-60bc-7543-aee9-ad793b621e35',
+      name: 'Dr. Rahim Uddin',
+      email: 'rahim.doctor@gmail.com',
+      profilePhoto: null,
+      contactNumber: '01712345678',
+      address: 'Rajshahi, Bangladesh',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: 'REG-12345',
+      experience: 8,
+      gender: 'MALE',
+      appointmentFee: 500,
+      qualification: 'MBBS, FCPS',
+      currentWorkingPlace: 'Rajshahi Medical College Hospital',
+      designation: 'Senior Consultant',
+      averageRating: 0,
+      createdAt: 2026-05-04T08:12:05.181Z,
+      updatedAt: 2026-05-04T08:12:05.181Z,
+      userId: 'ewKgxdafb7cjTAC4WeE2zW3GRvkYAsqu',
+      user: [Object],
+      specialties: [Array]
+    },
+    {
+      id: '019db3d2-588c-7789-a6c6-cef7f04869de',
+      name: 'Dr. Rahim Hasan',
+      email: 'rahim.hasan@gmail.com',
+      profilePhoto: 'https://example.com/profile.jpg',
+      contactNumber: '01712345678',
+      address: 'Dhaka, Bangladesh',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: 'BMDC-56789',
+      experience: 8,
+      gender: 'MALE',
+      appointmentFee: 800,
+      qualification: 'MBBS, FCPS (Medicine)',
+      currentWorkingPlace: 'Square Hospital',
+      designation: 'Consultant Medicine Specialist',
+      averageRating: 0,
+      createdAt: 2026-04-22T06:13:20.141Z,
+      updatedAt: 2026-04-22T06:13:20.141Z,
+      userId: 'AtrKjTP4z2sKjYxeTxXnSVOzF6uF71ZS',
+      user: [Object],
+      specialties: [Array]
+    }
+  ],
+  meta: { page: 1, limit: 10, total: 4, totalPages: 1 }
+}
+{
+  user: {
+    userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+    role: 'DOCTOR',
+    email: 'tanvir@gmail.com'
+  }
+}
+{
+  user: {
+    userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+    role: 'DOCTOR',
+    email: 'tanvir@gmail.com'
+  }
+}
+{
+  user: {
+    userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+    role: 'DOCTOR',
+    email: 'tanvir@gmail.com'
+  }
+}
+{
+  user: {
+    userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+    role: 'DOCTOR',
+    email: 'tanvir@gmail.com'
+  }
+}
+{
+  user: {
+    userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+    role: 'DOCTOR',
+    email: 'tanvir@gmail.com'
+  }
+}
+{
+  user: {
+    userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+    role: 'DOCTOR',
+    email: 'tanvir@gmail.com'
+  }
+}
+{
+  user: {
+    userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+    role: 'DOCTOR',
+    email: 'tanvir@gmail.com'
+  }
+}
+{
+  user: {
+    userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+    role: 'DOCTOR',
+    email: 'tanvir@gmail.com'
+  }
+}
+{
+  user: {
+    userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+    role: 'DOCTOR',
+    email: 'tanvir@gmail.com'
+  }
+}
+{
+  user: {
+    userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+    role: 'DOCTOR',
+    email: 'tanvir@gmail.com'
+  }
+}
+{
+  user: {
+    userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+    role: 'DOCTOR',
+    email: 'tanvir@gmail.com'
+  }
+}
+{
+  user: {
+    userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+    role: 'DOCTOR',
+    email: 'tanvir@gmail.com'
+  }
+}
+{
+  user: {
+    userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+    role: 'DOCTOR',
+    email: 'tanvir@gmail.com'
+  }
+}
+{
+  user: {
+    userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+    role: 'DOCTOR',
+    email: 'tanvir@gmail.com'
+  }
+}
+{
+  user: {
+    userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+    role: 'DOCTOR',
+    email: 'tanvir@gmail.com'
+  }
+}
+{
+  user: {
+    userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+    role: 'DOCTOR',
+    email: 'tanvir@gmail.com'
+  }
+}
+{
+  user: {
+    userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+    role: 'DOCTOR',
+    email: 'tanvir@gmail.com'
+  }
+}
+{
+  user: {
+    userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+    role: 'DOCTOR',
+    email: 'tanvir@gmail.com'
+  }
+}
+11:35:10 PM [tsx] change in ./src\app\routes\index.ts Restarting...
+c◇ injected env (27) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+CLOUD NAME: dc1gjngnn
+API KEY: 693381927832864
+API SECRET: LlgkNbciplkUTyRAzy9jXAoDCRM
+(node:53732) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Super admin already exists. Skipping seeding super admin.
+Server is running on http://localhost:5000
+{
+  user: {
+    userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+    role: 'DOCTOR',
+    email: 'tanvir@gmail.com'
+  }
+}
+{
+  user: {
+    userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+    role: 'DOCTOR',
+    email: 'tanvir@gmail.com'
+  }
+}
+{
+  user: {
+    userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+    role: 'DOCTOR',
+    email: 'tanvir@gmail.com'
+  }
+}
+{
+  user: {
+    userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+    role: 'DOCTOR',
+    email: 'tanvir@gmail.com'
+  }
+}
+{
+  user: {
+    userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+    role: 'DOCTOR',
+    email: 'tanvir@gmail.com'
+  }
+}
+{
+  user: {
+    userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+    role: 'DOCTOR',
+    email: 'tanvir@gmail.com'
+  }
+}
+{
+  user: {
+    userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+    role: 'DOCTOR',
+    email: 'tanvir@gmail.com'
+  }
+}
+{
+  user: {
+    userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+    role: 'DOCTOR',
+    email: 'tanvir@gmail.com'
+  }
+}
+{
+  user: {
+    userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+    role: 'DOCTOR',
+    email: 'tanvir@gmail.com'
+  }
+}
+{
+  user: {
+    userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+    role: 'DOCTOR',
+    email: 'tanvir@gmail.com'
+  }
+}
+{
+  user: {
+    userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+    role: 'DOCTOR',
+    email: 'tanvir@gmail.com'
+  }
+}
+{
+  user: {
+    userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+    role: 'DOCTOR',
+    email: 'tanvir@gmail.com'
+  }
+}
+{
+  user: {
+    userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+    role: 'DOCTOR',
+    email: 'tanvir@gmail.com'
+  }
+}
+{
+  user: {
+    userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+    role: 'DOCTOR',
+    email: 'tanvir@gmail.com'
+  }
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  data: [
+    {
+      id: '019fb934-7bde-7229-8dc9-e55a29a5c091',
+      name: 'Dr. Tanvir',
+      email: 'tanvir@gmail.com',
+      profilePhoto: null,
+      contactNumber: '01701560325',
+      address: 'mirupur 12',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: '12345',
+      experience: 2,
+      gender: 'MALE',
+      appointmentFee: 800,
+      qualification: 'MBBS, FCPS',
+      currentWorkingPlace: 'Dhaka Medical College Hospital',
+      designation: 'Assistant professor',
+      averageRating: 0,
+      createdAt: 2026-07-31T17:24:12.384Z,
+      updatedAt: 2026-07-31T17:24:12.384Z,
+      userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+      user: [Object],
+      specialties: [Array]
+    },
+    {
+      id: '019edf19-cce8-77bd-a293-d3a17414f119',
+      name: 'reday',
+      email: 'reday.doctor1@gmail.com',
+      profilePhoto: null,
+      contactNumber: '01712345678',
+      address: 'Rajshahi, Bangladesh',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: 'REG-1',
+      experience: 8,
+      gender: 'MALE',
+      appointmentFee: 500,
+      qualification: 'MBBS, FCPS',
+      currentWorkingPlace: 'Rajshahi Medical College Hospital',
+      designation: 'Senior Consultant',
+      averageRating: 0,
+      createdAt: 2026-06-19T08:57:50.568Z,
+      updatedAt: 2026-06-19T08:57:50.568Z,
+      userId: 'ruWqW4BzqP1ELmCPySYBDNO1aO7YQ59H',
+      user: [Object],
+      specialties: [Array]
+    },
+    {
+      id: '019df20b-60bc-7543-aee9-ad793b621e35',
+      name: 'Dr. Rahim Uddin',
+      email: 'rahim.doctor@gmail.com',
+      profilePhoto: null,
+      contactNumber: '01712345678',
+      address: 'Rajshahi, Bangladesh',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: 'REG-12345',
+      experience: 8,
+      gender: 'MALE',
+      appointmentFee: 500,
+      qualification: 'MBBS, FCPS',
+      currentWorkingPlace: 'Rajshahi Medical College Hospital',
+      designation: 'Senior Consultant',
+      averageRating: 0,
+      createdAt: 2026-05-04T08:12:05.181Z,
+      updatedAt: 2026-05-04T08:12:05.181Z,
+      userId: 'ewKgxdafb7cjTAC4WeE2zW3GRvkYAsqu',
+      user: [Object],
+      specialties: [Array]
+    },
+    {
+      id: '019db3d2-588c-7789-a6c6-cef7f04869de',
+      name: 'Dr. Rahim Hasan',
+      email: 'rahim.hasan@gmail.com',
+      profilePhoto: 'https://example.com/profile.jpg',
+      contactNumber: '01712345678',
+      address: 'Dhaka, Bangladesh',
+      isDeleted: false,
+      deletedAt: null,
+      registrationNumber: 'BMDC-56789',
+      experience: 8,
+      gender: 'MALE',
+      appointmentFee: 800,
+      qualification: 'MBBS, FCPS (Medicine)',
+      currentWorkingPlace: 'Square Hospital',
+      designation: 'Consultant Medicine Specialist',
+      averageRating: 0,
+      createdAt: 2026-04-22T06:13:20.141Z,
+      updatedAt: 2026-04-22T06:13:20.141Z,
+      userId: 'AtrKjTP4z2sKjYxeTxXnSVOzF6uF71ZS',
+      user: [Object],
+      specialties: [Array]
+    }
+  ],
+  meta: { page: 1, limit: 10, total: 4, totalPages: 1 }
+}
+11:41:39 PM [tsx] change in ./src\app\routes\index.ts Restarting...
+c◇ injected env (27) from .env // tip: ⌘ override existing { override: true }
+CLOUD NAME: dc1gjngnn
+API KEY: 693381927832864
+API SECRET: LlgkNbciplkUTyRAzy9jXAoDCRM
+(node:51208) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Super admin already exists. Skipping seeding super admin.
+Server is running on http://localhost:5000
+11:43:25 PM [tsx] change in ./src\app\modules\doctor\doctor.controller.ts Restarting...
+c◇ injected env (27) from .env // tip: ⌘ suppress logs { quiet: true }
+CLOUD NAME: dc1gjngnn
+API KEY: 693381927832864
+API SECRET: LlgkNbciplkUTyRAzy9jXAoDCRM
+(node:40032) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Super admin already exists. Skipping seeding super admin.
+Server is running on http://localhost:5000
+11:47:25 PM [tsx] change in ./src\app\routes\index.ts Restarting...
+c11:47:28 PM [tsx] change in ./src\app\routes\index.ts Restarting...
+c◇ injected env (27) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+CLOUD NAME: dc1gjngnn
+API KEY: 693381927832864
+API SECRET: LlgkNbciplkUTyRAzy9jXAoDCRM
+(node:53336) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Super admin already exists. Skipping seeding super admin.
+Server is running on http://localhost:5000
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+Running cron job to cancel unpaid appointments...
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  id: '019fb94c-d1b5-72c9-8170-a5e108cd93f8',
+  startDateTime: 2026-08-01T08:00:00.000Z,
+  endDateTime: 2026-08-01T08:30:00.000Z,
+  createdAt: 2026-07-31T17:50:47.223Z,
+  updatedAt: 2026-07-31T17:50:47.223Z
+}
+{
+  id: '019fb94c-d3c2-77b4-bbfd-9b5c2024acfb',
+  startDateTime: 2026-08-01T08:30:00.000Z,
+  endDateTime: 2026-08-01T09:00:00.000Z,
+  createdAt: 2026-07-31T17:50:47.746Z,
+  updatedAt: 2026-07-31T17:50:47.746Z
+}
+{
+  id: '019fb94c-d5ca-718e-b99d-3a1a273d6173',
+  startDateTime: 2026-08-01T09:00:00.000Z,
+  endDateTime: 2026-08-01T09:30:00.000Z,
+  createdAt: 2026-07-31T17:50:48.266Z,
+  updatedAt: 2026-07-31T17:50:48.266Z
+}
+{
+  id: '019fb94c-d7d1-753c-8e6f-d13d28e1243f',
+  startDateTime: 2026-08-01T09:30:00.000Z,
+  endDateTime: 2026-08-01T10:00:00.000Z,
+  createdAt: 2026-07-31T17:50:48.785Z,
+  updatedAt: 2026-07-31T17:50:48.785Z
+}
+{
+  id: '019fb94c-d9d6-7514-bd37-1d2078a2535b',
+  startDateTime: 2026-08-01T10:00:00.000Z,
+  endDateTime: 2026-08-01T10:30:00.000Z,
+  createdAt: 2026-07-31T17:50:49.302Z,
+  updatedAt: 2026-07-31T17:50:49.302Z
+}
+{
+  id: '019fb94c-dbde-7642-bed5-100ee29ae4aa',
+  startDateTime: 2026-08-01T10:30:00.000Z,
+  endDateTime: 2026-08-01T11:00:00.000Z,
+  createdAt: 2026-07-31T17:50:49.822Z,
+  updatedAt: 2026-07-31T17:50:49.822Z
+}
+{
+  id: '019fb94c-dde5-737e-bba7-db6f5a72358a',
+  startDateTime: 2026-08-01T11:00:00.000Z,
+  endDateTime: 2026-08-01T11:30:00.000Z,
+  createdAt: 2026-07-31T17:50:50.342Z,
+  updatedAt: 2026-07-31T17:50:50.342Z
+}
+{
+  id: '019fb94c-dfeb-708e-8242-cdb2b5137c4c',
+  startDateTime: 2026-08-01T11:30:00.000Z,
+  endDateTime: 2026-08-01T12:00:00.000Z,
+  createdAt: 2026-07-31T17:50:50.860Z,
+  updatedAt: 2026-07-31T17:50:50.860Z
+}
+{
+  id: '019fb94c-e1f3-73ac-9bf5-bd4fa26ae2d3',
+  startDateTime: 2026-08-02T08:00:00.000Z,
+  endDateTime: 2026-08-02T08:30:00.000Z,
+  createdAt: 2026-07-31T17:50:51.379Z,
+  updatedAt: 2026-07-31T17:50:51.379Z
+}
+{
+  id: '019fb94c-e3f9-75bd-a1de-59211a7b5ce2',
+  startDateTime: 2026-08-02T08:30:00.000Z,
+  endDateTime: 2026-08-02T09:00:00.000Z,
+  createdAt: 2026-07-31T17:50:51.897Z,
+  updatedAt: 2026-07-31T17:50:51.897Z
+}
+{
+  id: '019fb94c-e5ff-77c2-bcb4-84f8a3ef2e32',
+  startDateTime: 2026-08-02T09:00:00.000Z,
+  endDateTime: 2026-08-02T09:30:00.000Z,
+  createdAt: 2026-07-31T17:50:52.415Z,
+  updatedAt: 2026-07-31T17:50:52.415Z
+}
+{
+  id: '019fb94c-e807-75b6-a667-8e6fc2c3d753',
+  startDateTime: 2026-08-02T09:30:00.000Z,
+  endDateTime: 2026-08-02T10:00:00.000Z,
+  createdAt: 2026-07-31T17:50:52.935Z,
+  updatedAt: 2026-07-31T17:50:52.935Z
+}
+{
+  id: '019fb94c-ea10-742f-883d-e061cd80f5bf',
+  startDateTime: 2026-08-02T10:00:00.000Z,
+  endDateTime: 2026-08-02T10:30:00.000Z,
+  createdAt: 2026-07-31T17:50:53.456Z,
+  updatedAt: 2026-07-31T17:50:53.456Z
+}
+{
+  id: '019fb94c-ec16-70ff-821d-e02e3f169fef',
+  startDateTime: 2026-08-02T10:30:00.000Z,
+  endDateTime: 2026-08-02T11:00:00.000Z,
+  createdAt: 2026-07-31T17:50:53.974Z,
+  updatedAt: 2026-07-31T17:50:53.974Z
+}
+{
+  id: '019fb94c-ee1c-75c0-97cc-9119ab48f3d3',
+  startDateTime: 2026-08-02T11:00:00.000Z,
+  endDateTime: 2026-08-02T11:30:00.000Z,
+  createdAt: 2026-07-31T17:50:54.492Z,
+  updatedAt: 2026-07-31T17:50:54.492Z
+}
+{
+  id: '019fb94c-f028-7136-bc4e-1b2b77bc62f5',
+  startDateTime: 2026-08-02T11:30:00.000Z,
+  endDateTime: 2026-08-02T12:00:00.000Z,
+  createdAt: 2026-07-31T17:50:55.016Z,
+  updatedAt: 2026-07-31T17:50:55.016Z
+}
+{
+  id: '019fb94c-f403-73c2-a81d-4a331947d00b',
+  startDateTime: 2026-08-03T08:00:00.000Z,
+  endDateTime: 2026-08-03T08:30:00.000Z,
+  createdAt: 2026-07-31T17:50:56.003Z,
+  updatedAt: 2026-07-31T17:50:56.003Z
+}
+{
+  id: '019fb94c-f60a-779c-85ec-86709b49afc9',
+  startDateTime: 2026-08-03T08:30:00.000Z,
+  endDateTime: 2026-08-03T09:00:00.000Z,
+  createdAt: 2026-07-31T17:50:56.522Z,
+  updatedAt: 2026-07-31T17:50:56.522Z
+}
+{
+  id: '019fb94c-f80f-76ff-aff1-0c586e9c9244',
+  startDateTime: 2026-08-03T09:00:00.000Z,
+  endDateTime: 2026-08-03T09:30:00.000Z,
+  createdAt: 2026-07-31T17:50:57.039Z,
+  updatedAt: 2026-07-31T17:50:57.039Z
+}
+{
+  id: '019fb94c-fa15-771f-b591-a7423ff23610',
+  startDateTime: 2026-08-03T09:30:00.000Z,
+  endDateTime: 2026-08-03T10:00:00.000Z,
+  createdAt: 2026-07-31T17:50:57.557Z,
+  updatedAt: 2026-07-31T17:50:57.557Z
+}
+{
+  id: '019fb94c-fc1a-763a-a549-afb33a8327a4',
+  startDateTime: 2026-08-03T10:00:00.000Z,
+  endDateTime: 2026-08-03T10:30:00.000Z,
+  createdAt: 2026-07-31T17:50:58.074Z,
+  updatedAt: 2026-07-31T17:50:58.074Z
+}
+{
+  id: '019fb94c-fe21-729b-9064-7c9ca1483299',
+  startDateTime: 2026-08-03T10:30:00.000Z,
+  endDateTime: 2026-08-03T11:00:00.000Z,
+  createdAt: 2026-07-31T17:50:58.593Z,
+  updatedAt: 2026-07-31T17:50:58.593Z
+}
+{
+  id: '019fb94d-0025-730a-a200-4bd8eae6e5c1',
+  startDateTime: 2026-08-03T11:00:00.000Z,
+  endDateTime: 2026-08-03T11:30:00.000Z,
+  createdAt: 2026-07-31T17:50:59.109Z,
+  updatedAt: 2026-07-31T17:50:59.109Z
+}
+{
+  id: '019fb94d-022b-7297-ac0a-1c31743d94cd',
+  startDateTime: 2026-08-03T11:30:00.000Z,
+  endDateTime: 2026-08-03T12:00:00.000Z,
+  createdAt: 2026-07-31T17:50:59.627Z,
+  updatedAt: 2026-07-31T17:50:59.627Z
+}
+{
+  id: '019fb94d-0435-734b-9287-76ae67c89880',
+  startDateTime: 2026-08-04T08:00:00.000Z,
+  endDateTime: 2026-08-04T08:30:00.000Z,
+  createdAt: 2026-07-31T17:51:00.149Z,
+  updatedAt: 2026-07-31T17:51:00.149Z
+}
+{
+  id: '019fb94d-063b-777f-804f-53a37ca32805',
+  startDateTime: 2026-08-04T08:30:00.000Z,
+  endDateTime: 2026-08-04T09:00:00.000Z,
+  createdAt: 2026-07-31T17:51:00.667Z,
+  updatedAt: 2026-07-31T17:51:00.667Z
+}
+{
+  id: '019fb94d-0842-7799-8a45-d4e9698c2eb7',
+  startDateTime: 2026-08-04T09:00:00.000Z,
+  endDateTime: 2026-08-04T09:30:00.000Z,
+  createdAt: 2026-07-31T17:51:01.186Z,
+  updatedAt: 2026-07-31T17:51:01.186Z
+}
+{
+  id: '019fb94d-0a47-7589-96d7-cce778d300c7',
+  startDateTime: 2026-08-04T09:30:00.000Z,
+  endDateTime: 2026-08-04T10:00:00.000Z,
+  createdAt: 2026-07-31T17:51:01.703Z,
+  updatedAt: 2026-07-31T17:51:01.703Z
+}
+{
+  id: '019fb94d-0e1a-7171-aaf7-be643bf3b628',
+  startDateTime: 2026-08-04T10:00:00.000Z,
+  endDateTime: 2026-08-04T10:30:00.000Z,
+  createdAt: 2026-07-31T17:51:02.682Z,
+  updatedAt: 2026-07-31T17:51:02.682Z
+}
+{
+  id: '019fb94d-101f-7166-833f-aed78320171e',
+  startDateTime: 2026-08-04T10:30:00.000Z,
+  endDateTime: 2026-08-04T11:00:00.000Z,
+  createdAt: 2026-07-31T17:51:03.199Z,
+  updatedAt: 2026-07-31T17:51:03.199Z
+}
+{
+  id: '019fb94d-1224-712b-9ac5-5d6c4bc7eed5',
+  startDateTime: 2026-08-04T11:00:00.000Z,
+  endDateTime: 2026-08-04T11:30:00.000Z,
+  createdAt: 2026-07-31T17:51:03.716Z,
+  updatedAt: 2026-07-31T17:51:03.716Z
+}
+{
+  id: '019fb94d-142c-7659-b742-7c5b31da1288',
+  startDateTime: 2026-08-04T11:30:00.000Z,
+  endDateTime: 2026-08-04T12:00:00.000Z,
+  createdAt: 2026-07-31T17:51:04.236Z,
+  updatedAt: 2026-07-31T17:51:04.236Z
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  user: {
+    userId: 'NDaA9H50k7roXgOt7D8xbFMUcX9bw6sL',
+    role: 'SUPER_ADMIN',
+    email: 'admin@gmail.com'
+  }
+}
+{
+  user: {
+    userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+    role: 'DOCTOR',
+    email: 'tanvir@gmail.com'
+  }
+}
+{
+  user: {
+    userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+    role: 'DOCTOR',
+    email: 'tanvir@gmail.com'
+  }
+}
+{
+  user: {
+    userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+    role: 'DOCTOR',
+    email: 'tanvir@gmail.com'
+  }
+}
+{
+  user: {
+    userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+    role: 'DOCTOR',
+    email: 'tanvir@gmail.com'
+  }
+}
+{
+  user: {
+    userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+    role: 'DOCTOR',
+    email: 'tanvir@gmail.com'
+  }
+}
+{
+  user: {
+    userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+    role: 'DOCTOR',
+    email: 'tanvir@gmail.com'
+  }
+}
+{
+  user: {
+    userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+    role: 'DOCTOR',
+    email: 'tanvir@gmail.com'
+  }
+}
+{
+  user: {
+    userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+    role: 'DOCTOR',
+    email: 'tanvir@gmail.com'
+  }
+}
+{
+  user: {
+    userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+    role: 'DOCTOR',
+    email: 'tanvir@gmail.com'
+  }
+}
+{
+  user: {
+    userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+    role: 'DOCTOR',
+    email: 'tanvir@gmail.com'
+  }
+}
+{
+  user: {
+    userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+    role: 'DOCTOR',
+    email: 'tanvir@gmail.com'
+  }
+}
+{
+  user: {
+    userId: '1Wmz3Kym0ANQZc4QHZ794bsKtW7y6EkJ',
+    role: 'DOCTOR',
+    email: 'tanvir@gmail.com'
+  }
+}
+{ user: undefined }
+Error from Global Error Handler TypeError: Cannot read properties of undefined (reading 'userId')
+    at Object.getMe (F:\All Project\Healthcare\healthcare-backend\src\app\modules\auth\auth.service.ts:143:23)
+    at <anonymous> (F:\All Project\Healthcare\healthcare-backend\src\app\modules\auth\auth.controller.ts:70:42)
+    at <anonymous> (F:\All Project\Healthcare\healthcare-backend\src\app\shared\catchAsync.ts:6:19)
+    at Layer.handleRequest (F:\All Project\Healthcare\healthcare-backend\node_modules\router\lib\layer.js:152:17)
+    at next (F:\All Project\Healthcare\healthcare-backend\node_modules\router\lib\route.js:157:13)
+    at <anonymous> (F:\All Project\Healthcare\healthcare-backend\src\app\middleware\checkAuth.ts:96:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+GLOBAL ERROR => TypeError: Cannot read properties of undefined (reading 'userId')
+    at Object.getMe (F:\All Project\Healthcare\healthcare-backend\src\app\modules\auth\auth.service.ts:143:23)
+    at <anonymous> (F:\All Project\Healthcare\healthcare-backend\src\app\modules\auth\auth.controller.ts:70:42)
+    at <anonymous> (F:\All Project\Healthcare\healthcare-backend\src\app\shared\catchAsync.ts:6:19)
+    at Layer.handleRequest (F:\All Project\Healthcare\healthcare-backend\node_modules\router\lib\layer.js:152:17)
+    at next (F:\All Project\Healthcare\healthcare-backend\node_modules\router\lib\route.js:157:13)
+    at <anonymous> (F:\All Project\Healthcare\healthcare-backend\src\app\middleware\checkAuth.ts:96:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+{ user: undefined }
+Error from Global Error Handler TypeError: Cannot read properties of undefined (reading 'userId')
+    at Object.getMe (F:\All Project\Healthcare\healthcare-backend\src\app\modules\auth\auth.service.ts:143:23)
+    at <anonymous> (F:\All Project\Healthcare\healthcare-backend\src\app\modules\auth\auth.controller.ts:70:42)
+    at <anonymous> (F:\All Project\Healthcare\healthcare-backend\src\app\shared\catchAsync.ts:6:19)
+    at Layer.handleRequest (F:\All Project\Healthcare\healthcare-backend\node_modules\router\lib\layer.js:152:17)
+    at next (F:\All Project\Healthcare\healthcare-backend\node_modules\router\lib\route.js:157:13)
+    at <anonymous> (F:\All Project\Healthcare\healthcare-backend\src\app\middleware\checkAuth.ts:96:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+GLOBAL ERROR => TypeError: Cannot read properties of undefined (reading 'userId')
+    at Object.getMe (F:\All Project\Healthcare\healthcare-backend\src\app\modules\auth\auth.service.ts:143:23)
+    at <anonymous> (F:\All Project\Healthcare\healthcare-backend\src\app\modules\auth\auth.controller.ts:70:42)
+    at <anonymous> (F:\All Project\Healthcare\healthcare-backend\src\app\shared\catchAsync.ts:6:19)
+    at Layer.handleRequest (F:\All Project\Healthcare\healthcare-backend\node_modules\router\lib\layer.js:152:17)
+    at next (F:\All Project\Healthcare\healthcare-backend\node_modules\router\lib\route.js:157:13)
+    at <anonymous> (F:\All Project\Healthcare\healthcare-backend\src\app\middleware\checkAuth.ts:96:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+Running cron job to cancel unpaid appointments...
+
+F:\All Project\Healthcare\healthcare-backend>
