@@ -1,10 +1,28 @@
-import { Specialty } from "../../../generated/prisma/client";
+import { Prisma, Specialty } from "../../../generated/prisma/client";
 import { prisma } from "../../lib/prisma";
 
 const CACHE_TTL_MS = 10 * 60 * 1000; // 10 minutes
 
+const specialtyQueryArgs = {
+  where: { isDeleted: false },
+  orderBy: { title: "asc" as const },
+  include: {
+    _count: {
+      select: {
+        doctorSpecialties: {
+          where: { doctor: { isDeleted: false } },
+        },
+      },
+    },
+  },
+} satisfies Prisma.SpecialtyFindManyArgs;
+
+type SpecialtyWithCount = Prisma.SpecialtyGetPayload<
+  typeof specialtyQueryArgs
+>;
+
 interface CacheEntry {
-  data: Specialty[];
+  data: SpecialtyWithCount[];
   expiresAt: number;
 }
 
@@ -27,15 +45,12 @@ const createSpecialty = async (payload: Specialty) => {
   return specialty;
 };
 
-const getAllSpecialties = async (): Promise<Specialty[]> => {
+const getAllSpecialties = async (): Promise<SpecialtyWithCount[]> => {
   if (isCacheValid()) {
     return cache!.data;
   }
 
-  const specialties = await prisma.specialty.findMany({
-    where: { isDeleted: false },
-    orderBy: { title: "asc" },
-  });
+  const specialties = await prisma.specialty.findMany(specialtyQueryArgs);
 
   cache = {
     data: specialties,
