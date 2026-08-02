@@ -21,6 +21,21 @@ const getAllDoctors = catchAsync(
     }
 )
 
+const getTopRatedDoctors = catchAsync(
+    async (req: Request, res: Response) => {
+        const query = req.query;
+
+        const doctors = await DoctorService.getTopRatedDoctors(query as IQueryParams);
+
+        sendResponse(res, {
+            httpStatusCode: status.OK,
+            success: true,
+            message: "Top rated doctors fetched successfully",
+            data: doctors,
+        })
+    }
+)
+
 const getDoctorById = catchAsync(
     async (req: Request, res: Response) => {
         const { id } = req.params;
@@ -69,6 +84,7 @@ const deleteDoctor = catchAsync(
 
 export const DoctorController = {
     getAllDoctors,
+    getTopRatedDoctors,
     getDoctorById,
     updateDoctor,
     deleteDoctor,

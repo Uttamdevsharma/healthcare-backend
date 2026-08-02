@@ -37,6 +37,12 @@ export const globalErrorHandler = async (err:any,req:Request,res:Response,next:N
         message = simplifiedError.message,
         errorSources = [...simplifiedError.errorSources]
         stack = err.stack
+    }else if(err && err.code === 'P1017'){
+        // Prisma connection closed / driver error
+        statusCode = status.SERVICE_UNAVAILABLE;
+        message = 'Database connection closed. Please try again shortly.';
+        errorSources = [{ path: 'database', message: String(err.message) }];
+        stack = err.stack;
     }else if(err instanceof AppError){
         statusCode = err.statusCode
         message = err.message

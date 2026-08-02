@@ -69,16 +69,29 @@ const updateMyProfile = async (
         ) as Date;
       }
 
-      await tx.patientHealthData.upsert({
-        where: {
-          patientId: patientData.id,
-        },
-        update: healthDataToSave,
-        create: {
-          patientId: patientData.id,
-          ...healthDataToSave,
-        },
-      });
+      // patientData was fetched with `patientHealthData` included above.
+      // If health data already exists -> update, otherwise create.
+      if (patientData.patientHealthData) {
+        await tx.patientHealthData.update({
+          where: { patientId: patientData.id },
+          data: healthDataToSave,
+        });
+      } else {
+        // `dateOfBirth` is required by the Prisma schema for creation.
+        if (!healthDataToSave.dateOfBirth) {
+          throw new AppError(
+            status.BAD_REQUEST,
+            "dateOfBirth is required when creating patient health data",
+          );
+        }
+
+        await tx.patientHealthData.create({
+          data: {
+            patientId: patientData.id,
+            ...healthDataToSave,
+          },
+        });
+      }
     }
 
     if (

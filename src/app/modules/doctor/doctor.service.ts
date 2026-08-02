@@ -64,6 +64,40 @@ const getAllDoctors = async (query: IQueryParams) => {
   return result;
 };
 
+const getTopRatedDoctors = async (query: IQueryParams) => {
+  const limit = Number(query.limit) || 3;
+
+  const doctors = await prisma.doctor.findMany({
+    where: {
+      isDeleted: false,
+    },
+    include: {
+      user: true,
+      specialties: {
+        include: {
+          specialty: true,
+        },
+      },
+      _count: {
+        select: {
+          reviews: true,
+        },
+      },
+    },
+    orderBy: [
+      {
+        averageRating: "desc",
+      },
+      {
+        createdAt: "desc",
+      },
+    ],
+    take: limit,
+  });
+
+  return doctors;
+};
+
 const getDoctorById = async (id: string) => {
   const doctor = await prisma.doctor.findUnique({
     where: {
@@ -199,6 +233,7 @@ const deleteDoctor = async (id: string) => {
 
 export const DoctorService = {
   getAllDoctors,
+  getTopRatedDoctors,
   getDoctorById,
   updateDoctor,
   deleteDoctor,
