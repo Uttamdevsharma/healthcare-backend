@@ -56,6 +56,14 @@ const updateDoctor = catchAsync(
         const { id } = req.params;
         const payload = req.body;
 
+        // Handle profile photo upload
+        if (req.file) {
+            if (!payload.doctor) {
+                payload.doctor = {};
+            }
+            payload.doctor.profilePhoto = req.file.path;
+        }
+
         const updatedDoctor = await DoctorService.updateDoctor(id as string, payload);
 
         sendResponse(res, {
