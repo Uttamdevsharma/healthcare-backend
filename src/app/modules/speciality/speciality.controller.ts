@@ -21,6 +21,12 @@ const createSpecialty = catchAsync(async (req: Request, res: Response) => {
 
 const getAllSpecialties = catchAsync(async (req: Request, res: Response) => {
   const result = await SpecialtyService.getAllSpecialties();
+
+  res.setHeader(
+    "Cache-Control",
+    "public, max-age=300, s-maxage=600, stale-while-revalidate=86400"
+  );
+
   sendResponse(res, {
     httpStatusCode: 200,
     success: true,
