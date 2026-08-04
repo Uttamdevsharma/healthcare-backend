@@ -309,6 +309,48 @@ const updatePrescription = async (user: IRequestUser, prescriptionId: string, pa
     return result;
 };
 
+const downloadPrescriptionPdf = async (user: IRequestUser, prescriptionId: string): Promise<{ buffer: Buffer; fileName: string }> => {
+    const prescriptionData = await prisma.prescription.findUniqueOrThrow({
+        where: {
+            id: prescriptionId
+        },
+        include: {
+            doctor: true,
+            patient: true,
+            appointment: {
+                include: {
+                    schedule: true
+                }
+            }
+        }
+    });
+
+    const isOwnerPatient = user.email === prescriptionData.patient.email;
+    const isOwnerDoctor = user.email === prescriptionData.doctor.email;
+    const isAdmin = user.role === Role.ADMIN || user.role === Role.SUPER_ADMIN;
+
+    if (!isOwnerPatient && !isOwnerDoctor && !isAdmin) {
+        throw new AppError(status.FORBIDDEN, "You are not authorized to download this prescription");
+    }
+
+    const pdfBuffer = await generatePrescriptionPDF({
+        doctorName: prescriptionData.doctor.name,
+        doctorEmail: prescriptionData.doctor.email,
+        patientName: prescriptionData.patient.name,
+        patientEmail: prescriptionData.patient.email,
+        appointmentDate: prescriptionData.appointment.schedule.startDateTime,
+        instructions: prescriptionData.instructions,
+        followUpDate: prescriptionData.followUpDate,
+        prescriptionId: prescriptionData.id,
+        createdAt: prescriptionData.createdAt,
+    });
+
+    return {
+        buffer: pdfBuffer,
+        fileName: `Prescription-${prescriptionData.id}.pdf`,
+    };
+};
+
 const deletePrescription = async (user: IRequestUser, prescriptionId: string): Promise<void> => {
     // Verify user exists
     const isUserExists = await prisma.user.findUnique({
@@ -360,5 +402,6 @@ export const PrescriptionService = {
     myPrescriptions,
     getAllPrescriptions,
     updatePrescription,
+    downloadPrescriptionPdf,
     deletePrescription
 }

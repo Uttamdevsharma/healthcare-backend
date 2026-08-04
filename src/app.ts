@@ -2,8 +2,6 @@ import express, { Application, NextFunction, Request, Response } from "express";
 import cookieParser from "cookie-parser";
 import { IndexRoutes } from "./app/routes";
 import cors from "cors";
-import { success } from "better-auth";
-import { error } from "node:console";
 import { globalErrorHandler } from "./app/middleware/globalErrorHandler";
 import { notFound } from "./app/middleware/notFound";
 import path from "path";
@@ -15,6 +13,11 @@ import qs from "qs";
 import { PaymentController } from "./app/modules/payment/payment.controller";
 import cron from "node-cron";
 import { AppointmentService } from "./app/modules/appointment/appointment.service";
+
+const faviconBuffer = Buffer.from(
+  "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAIAAeIhG2QAAAABJRU5ErkJggg==",
+  "base64",
+);
 
 app.set("query parser", (str: string) => qs.parse(str));
 app.set("view engine", "ejs");
@@ -57,8 +60,12 @@ cron.schedule("*/25 * * * *", async () => {
 
 app.use("/api/v1", IndexRoutes);
 
-app.get("/", async (req: Request, res: Response) => {
-  res.status(201).json({
+app.get(["/favicon.ico", "/favicon.png"], (_req: Request, res: Response) => {
+  res.type("image/png").status(200).send(faviconBuffer);
+});
+
+app.get("/", async (_req: Request, res: Response) => {
+  res.status(200).json({
     success: true,
     message: "Healthcare API is working",
   });

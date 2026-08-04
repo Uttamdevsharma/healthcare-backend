@@ -2,11 +2,11 @@
   "name": "healthcare-backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "api/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node dist/server.js",
-    "build": "tsc -p .",
+    "build": "tsup src/index.ts --format esm --platform node --target node20 --outDir api --no-treeshake",
     "stripe:webhook": "stripe listen --forward-to localhost:5000/webhook",
     "dev": "tsx watch src/server.ts"
   },
@@ -52,6 +52,7 @@
     "nodemon": "^3.1.14",
     "prisma": "^7.7.0",
     "ts-node": "^10.9.2",
+    "tsup": "^8.5.1",
     "typescript": "^6.0.2"
   }
 }

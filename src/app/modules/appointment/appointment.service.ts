@@ -10,6 +10,8 @@ import { prisma } from "../../lib/prisma";
 import { AppointmentStatus } from "./../../../generated/prisma/enums";
 import { IBookAppointmentPayload } from "./appointment.interface";
 
+const MIN_APPOINTMENT_FEE_BDT = 100;
+
 // Pay Now Book Appointment
 const bookAppointment = async (
   payload: IBookAppointmentPayload,
@@ -70,6 +72,13 @@ const bookAppointment = async (
     //TODO : Payment Integration will be here
 
     const transactionId = String(uuidv7());
+
+    if (doctorData.appointmentFee < MIN_APPOINTMENT_FEE_BDT) {
+      throw new AppError(
+        status.BAD_REQUEST,
+        `Appointment fee (৳${doctorData.appointmentFee}) is below the minimum required amount (৳${MIN_APPOINTMENT_FEE_BDT}) for Stripe payments. Please contact the doctor to update their fee.`
+      );
+    }
 
     const paymentData = await tx.payment.create({
       data: {
@@ -523,6 +532,13 @@ const initiatePayment = async (appointmentId: string, user: IRequestUser) => {  
 
   if (appointmentData.status === AppointmentStatus.CANCELED) {
     throw new AppError(status.BAD_REQUEST, "Appointment is canceled");
+  }
+
+  if (appointmentData.doctor.appointmentFee < MIN_APPOINTMENT_FEE_BDT) {
+    throw new AppError(
+      status.BAD_REQUEST,
+      `Appointment fee (৳${appointmentData.doctor.appointmentFee}) is below the minimum required amount (৳${MIN_APPOINTMENT_FEE_BDT}) for Stripe payments. Please contact the doctor to update their fee.`
+    );
   }
 
   const session = await stripe.checkout.sessions.create({

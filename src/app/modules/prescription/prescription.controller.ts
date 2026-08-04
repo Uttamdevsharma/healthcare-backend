@@ -63,10 +63,22 @@ const deletePrescription = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+const downloadPrescriptionPdf = catchAsync(async (req: Request, res: Response) => {
+    const user = req.user;
+    const prescriptionId = req.params.id;
+    const { buffer, fileName } = await PrescriptionService.downloadPrescriptionPdf(user, prescriptionId as string);
+
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `inline; filename="${fileName}"`);
+    res.setHeader('Content-Length', buffer.length.toString());
+    res.status(httpStatus.OK).send(buffer);
+});
+
 export const PrescriptionController = {
     givePrescription,
     myPrescriptions,
     getAllPrescriptions,
     updatePrescription,
+    downloadPrescriptionPdf,
     deletePrescription
 };

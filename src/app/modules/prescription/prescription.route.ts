@@ -19,6 +19,12 @@ router.get(
     PrescriptionController.myPrescriptions
 )
 
+router.get(
+    '/:id/pdf',
+    checkAuth(Role.SUPER_ADMIN, Role.ADMIN, Role.PATIENT, Role.DOCTOR),
+    PrescriptionController.downloadPrescriptionPdf
+)
+
 router.post(
     '/',
     checkAuth(Role.DOCTOR),
