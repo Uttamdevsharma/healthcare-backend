@@ -38,6 +38,11 @@ interface EnvConfig {
     },
     SUPER_ADMIN_EMAIL: string;
     SUPER_ADMIN_PASSWORD: string;
+    LIVEKIT:{
+        LIVEKIT_URL: string;
+        LIVEKIT_API_KEY: string;
+        LIVEKIT_API_SECRET: string;
+    }
 }
 
 
@@ -71,6 +76,9 @@ const loadEnvVariables = (): EnvConfig => {
         'STRIPE_WEBHOOK_SECRET',
         'SUPER_ADMIN_EMAIL',
         'SUPER_ADMIN_PASSWORD',
+        'LIVEKIT_URL',
+        'LIVEKIT_API_KEY',
+        'LIVEKIT_API_SECRET',
     ]
 
     requireEnvVariable.forEach((variable) => {
@@ -114,6 +122,11 @@ const loadEnvVariables = (): EnvConfig => {
         },
         SUPER_ADMIN_EMAIL: process.env.SUPER_ADMIN_EMAIL as string,
         SUPER_ADMIN_PASSWORD: process.env.SUPER_ADMIN_PASSWORD as string,
+        LIVEKIT: {
+            LIVEKIT_URL: process.env.LIVEKIT_URL as string,
+            LIVEKIT_API_KEY: process.env.LIVEKIT_API_KEY as string,
+            LIVEKIT_API_SECRET: process.env.LIVEKIT_API_SECRET as string,
+        },
     }
 }
 

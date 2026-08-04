@@ -347,6 +347,58 @@ const getMySingleAppointment = async (
   return appointment;
 };
 
+const getPatientHealthRecords = async (
+  patientId: string,
+  user: IRequestUser,
+) => {
+  if (user.role === Role.DOCTOR) {
+    const doctorData = await prisma.doctor.findUnique({
+      where: {
+        email: user.email,
+      },
+    });
+
+    if (!doctorData) {
+      throw new AppError(status.NOT_FOUND, "Doctor not found");
+    }
+
+    const appointmentExists = await prisma.appointment.findFirst({
+      where: {
+        doctorId: doctorData.id,
+        patientId,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (!appointmentExists) {
+      throw new AppError(
+        status.FORBIDDEN,
+        "You do not have permission to view this patient's health records",
+      );
+    }
+  }
+
+  const patient = await prisma.patient.findFirst({
+    where: {
+      id: patientId,
+      isDeleted: false,
+    },
+    include: {
+      user: true,
+      patientHealthData: true,
+      medicalReports: true,
+    },
+  });
+
+  if (!patient) {
+    throw new AppError(status.NOT_FOUND, "Patient not found");
+  }
+
+  return patient;
+};
+
 const getAppointmentByVideoCallId = async (
   videoCallingId: string,
   user: IRequestUser,
@@ -721,6 +773,7 @@ export const AppointmentService = {
   changeAppointmentStatus,
   getMySingleAppointment,
   getAllAppointments,
+  getPatientHealthRecords,
   getAppointmentByVideoCallId,
   bookAppointmentWithPayLater,
   initiatePayment,

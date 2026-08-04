@@ -65,6 +65,19 @@ const getAllAppointments = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+const getPatientHealthRecords = catchAsync(async (req: Request, res: Response) => {
+    const patientId = req.params.patientId;
+    const user = req.user;
+
+    const patient = await AppointmentService.getPatientHealthRecords(patientId as string, user);
+    sendResponse(res, {
+        success: true,
+        httpStatusCode: status.OK,
+        message: 'Patient health records retrieved successfully',
+        data: patient
+    });
+});
+
 const getAppointmentByVideoCallId = catchAsync(async (req: Request, res: Response) => {
     const videoCallingId = req.params.videoCallingId;
     const user = req.user;
@@ -127,6 +140,7 @@ export const AppointmentController = {
     changeAppointmentStatus,
     getMySingleAppointment,
     getAllAppointments,
+    getPatientHealthRecords,
     getAppointmentByVideoCallId,
     bookAppointmentWithPayLater,
     initiatePayment,
