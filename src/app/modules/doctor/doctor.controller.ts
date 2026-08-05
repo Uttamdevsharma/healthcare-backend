@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import status from "http-status";
 import { catchAsync } from "../../shared/catchAsync";
 import { sendResponse } from "../../shared/sendResponse";
+import { uploadFileToCloudinary } from "../../config/cloudinary.config";
 import { DoctorService } from "./doctor.service";
 import { IQueryParams } from "../../interfaces/query.interface";
 
@@ -61,7 +62,10 @@ const updateDoctor = catchAsync(
             if (!payload.doctor) {
                 payload.doctor = {};
             }
-            payload.doctor.profilePhoto = req.file.path;
+            const extension = req.file.originalname.split(".").pop();
+            const fileName = `doctor-profile-${Date.now()}.${extension}`;
+            const uploadedFile = await uploadFileToCloudinary(req.file.buffer, fileName);
+            payload.doctor.profilePhoto = uploadedFile.secure_url;
         }
 
         const updatedDoctor = await DoctorService.updateDoctor(id as string, payload);
