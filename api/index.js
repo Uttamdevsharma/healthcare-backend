@@ -103,7 +103,10 @@ var loadEnvVariables = () => {
     "STRIPE_SECRET_KEY",
     "STRIPE_WEBHOOK_SECRET",
     "SUPER_ADMIN_EMAIL",
-    "SUPER_ADMIN_PASSWORD"
+    "SUPER_ADMIN_PASSWORD",
+    "LIVEKIT_URL",
+    "LIVEKIT_API_KEY",
+    "LIVEKIT_API_SECRET"
   ];
   requireEnvVariable.forEach((variable) => {
     if (!process.env[variable]) {
@@ -143,7 +146,12 @@ var loadEnvVariables = () => {
       STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET
     },
     SUPER_ADMIN_EMAIL: process.env.SUPER_ADMIN_EMAIL,
-    SUPER_ADMIN_PASSWORD: process.env.SUPER_ADMIN_PASSWORD
+    SUPER_ADMIN_PASSWORD: process.env.SUPER_ADMIN_PASSWORD,
+    LIVEKIT: {
+      LIVEKIT_URL: process.env.LIVEKIT_URL,
+      LIVEKIT_API_KEY: process.env.LIVEKIT_API_KEY,
+      LIVEKIT_API_SECRET: process.env.LIVEKIT_API_SECRET
+    }
   };
 };
 var envVars = loadEnvVariables();
@@ -14377,6 +14385,37 @@ import { v7 as uuidv72 } from "uuid";
 import Stripe from "stripe";
 var stripe = new Stripe(envVars.STRIPE.STRIPE_SECRET_KEY);
 
+// src/app/utils/livekit.ts
+import { AccessToken } from "livekit-server-sdk";
+var createLiveKitAccessToken = async ({
+  roomName,
+  identity,
+  name,
+  ttl = "2h"
+}) => {
+  const at = new AccessToken(
+    envVars.LIVEKIT.LIVEKIT_API_KEY,
+    envVars.LIVEKIT.LIVEKIT_API_SECRET,
+    {
+      identity,
+      name,
+      ttl
+    }
+  );
+  at.addGrant({
+    roomJoin: true,
+    room: roomName,
+    canPublish: true,
+    canSubscribe: true
+  });
+  return await at.toJwt();
+};
+var getLiveKitUrl = () => envVars.LIVEKIT.LIVEKIT_URL;
+var liveKitUtils = {
+  createLiveKitAccessToken,
+  getLiveKitUrl
+};
+
 // src/app/modules/appointment/appointment.service.ts
 var MIN_APPOINTMENT_FEE_BDT = 100;
 var bookAppointment = async (payload, user) => {
@@ -14644,7 +14683,49 @@ var getMySingleAppointment = async (appointmentId, user) => {
   }
   return appointment;
 };
-var getAppointmentByVideoCallId = async (videoCallingId, user) => {
+var getPatientHealthRecords = async (patientId, user) => {
+  if (user.role === Role.DOCTOR) {
+    const doctorData = await prisma.doctor.findUnique({
+      where: {
+        email: user.email
+      }
+    });
+    if (!doctorData) {
+      throw new AppError_default(status5.NOT_FOUND, "Doctor not found");
+    }
+    const appointmentExists = await prisma.appointment.findFirst({
+      where: {
+        doctorId: doctorData.id,
+        patientId
+      },
+      select: {
+        id: true
+      }
+    });
+    if (!appointmentExists) {
+      throw new AppError_default(
+        status5.FORBIDDEN,
+        "You do not have permission to view this patient's health records"
+      );
+    }
+  }
+  const patient = await prisma.patient.findFirst({
+    where: {
+      id: patientId,
+      isDeleted: false
+    },
+    include: {
+      user: true,
+      patientHealthData: true,
+      medicalReports: true
+    }
+  });
+  if (!patient) {
+    throw new AppError_default(status5.NOT_FOUND, "Patient not found");
+  }
+  return patient;
+};
+var findAppointmentByVideoCallId = async (videoCallingId, user) => {
   const patientData = await prisma.patient.findUnique({
     where: {
       userId: user?.userId
@@ -14688,6 +14769,41 @@ var getAppointmentByVideoCallId = async (videoCallingId, user) => {
     );
   }
   return appointment;
+};
+var getAppointmentByVideoCallId = async (videoCallingId, user) => {
+  return findAppointmentByVideoCallId(videoCallingId, user);
+};
+var getVideoCallToken = async (videoCallingId, user) => {
+  const appointment = await findAppointmentByVideoCallId(videoCallingId, user);
+  if (appointment.status === AppointmentStatus.COMPLETED || appointment.status === AppointmentStatus.CANCELED) {
+    throw new AppError_default(
+      status5.BAD_REQUEST,
+      `This consultation is ${appointment.status.toLowerCase()}. You cannot join it.`
+    );
+  }
+  const userData = await prisma.user.findUniqueOrThrow({
+    where: {
+      id: user.userId
+    },
+    select: {
+      id: true,
+      name: true,
+      role: true
+    }
+  });
+  const token = await liveKitUtils.createLiveKitAccessToken({
+    roomName: appointment.videoCallingId,
+    identity: userData.id,
+    name: userData.name,
+    ttl: "2h"
+  });
+  return {
+    url: liveKitUtils.getLiveKitUrl(),
+    token,
+    identity: userData.id,
+    name: userData.name,
+    role: userData.role
+  };
 };
 var getAllAppointments = async () => {
   const appointments = await prisma.appointment.findMany({
@@ -14956,7 +15072,9 @@ var AppointmentService = {
   changeAppointmentStatus,
   getMySingleAppointment,
   getAllAppointments,
+  getPatientHealthRecords,
   getAppointmentByVideoCallId,
+  getVideoCallToken,
   bookAppointmentWithPayLater,
   initiatePayment,
   verifyPayment,
@@ -15017,6 +15135,17 @@ var getAllAppointments2 = catchAsync(async (req, res) => {
     data: appointments
   });
 });
+var getPatientHealthRecords2 = catchAsync(async (req, res) => {
+  const patientId = req.params.patientId;
+  const user = req.user;
+  const patient = await AppointmentService.getPatientHealthRecords(patientId, user);
+  sendResponse(res, {
+    success: true,
+    httpStatusCode: status6.OK,
+    message: "Patient health records retrieved successfully",
+    data: patient
+  });
+});
 var getAppointmentByVideoCallId2 = catchAsync(async (req, res) => {
   const videoCallingId = req.params.videoCallingId;
   const user = req.user;
@@ -15026,6 +15155,17 @@ var getAppointmentByVideoCallId2 = catchAsync(async (req, res) => {
     httpStatusCode: status6.OK,
     message: "Appointment retrieved successfully",
     data: appointment
+  });
+});
+var getVideoCallToken2 = catchAsync(async (req, res) => {
+  const videoCallingId = req.params.videoCallingId;
+  const user = req.user;
+  const tokenData = await AppointmentService.getVideoCallToken(videoCallingId, user);
+  sendResponse(res, {
+    success: true,
+    httpStatusCode: status6.OK,
+    message: "Video call token generated successfully",
+    data: tokenData
   });
 });
 var bookAppointmentWithPayLater2 = catchAsync(async (req, res) => {
@@ -15070,7 +15210,9 @@ var AppointmentController = {
   changeAppointmentStatus: changeAppointmentStatus2,
   getMySingleAppointment: getMySingleAppointment2,
   getAllAppointments: getAllAppointments2,
+  getPatientHealthRecords: getPatientHealthRecords2,
   getAppointmentByVideoCallId: getAppointmentByVideoCallId2,
+  getVideoCallToken: getVideoCallToken2,
   bookAppointmentWithPayLater: bookAppointmentWithPayLater2,
   initiatePayment: initiatePayment2,
   verifyPayment: verifyPayment2
@@ -15082,8 +15224,10 @@ router2.post("/book-appointment", checkAuth(Role.PATIENT), AppointmentController
 router2.get("/my-appointments", checkAuth(Role.PATIENT, Role.DOCTOR), AppointmentController.getMyAppointments);
 router2.patch("/change-appointment-status/:id", checkAuth(Role.PATIENT, Role.DOCTOR, Role.ADMIN, Role.SUPER_ADMIN), AppointmentController.changeAppointmentStatus);
 router2.get("/my-single-appointment/:id", checkAuth(Role.PATIENT, Role.DOCTOR), AppointmentController.getMySingleAppointment);
+router2.get("/patient-health-records/:patientId", checkAuth(Role.DOCTOR, Role.ADMIN, Role.SUPER_ADMIN), AppointmentController.getPatientHealthRecords);
 router2.get("/all-appointments", checkAuth(Role.ADMIN, Role.SUPER_ADMIN), AppointmentController.getAllAppointments);
 router2.get("/by-video-call-id/:videoCallingId", checkAuth(Role.PATIENT, Role.DOCTOR), AppointmentController.getAppointmentByVideoCallId);
+router2.get("/video-call-token/:videoCallingId", checkAuth(Role.PATIENT, Role.DOCTOR), AppointmentController.getVideoCallToken);
 router2.post("/book-appointment-with-pay-later", checkAuth(Role.PATIENT), AppointmentController.bookAppointmentWithPayLater);
 router2.post("/initiate-payment/:id", checkAuth(Role.PATIENT), AppointmentController.initiatePayment);
 router2.post("/verify-payment", checkAuth(Role.PATIENT), AppointmentController.verifyPayment);
@@ -16951,10 +17095,10 @@ var deleteFileFromCloudinary = async (url2) => {
 };
 
 // src/app/modules/patient/patient.utils.ts
-import { isValid, parse as parse3 } from "date-fns";
+import { isValid } from "date-fns";
 var convertToDateTime = (dateString) => {
   if (!dateString) return void 0;
-  const date5 = parse3(dateString, "yyyy-MM-dd", /* @__PURE__ */ new Date());
+  const date5 = new Date(dateString);
   if (!isValid(date5)) return void 0;
   return date5;
 };

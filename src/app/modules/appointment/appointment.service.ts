@@ -7,6 +7,7 @@ import { stripe } from "../../config/stripe.config";
 import AppError from "../../errorHelpers/AppError";
 import { IRequestUser } from "../../interfaces/requestUser.interface";
 import { prisma } from "../../lib/prisma";
+import { liveKitUtils } from "../../utils/livekit";
 import { AppointmentStatus } from "./../../../generated/prisma/enums";
 import { IBookAppointmentPayload } from "./appointment.interface";
 
@@ -399,7 +400,7 @@ const getPatientHealthRecords = async (
   return patient;
 };
 
-const getAppointmentByVideoCallId = async (
+const findAppointmentByVideoCallId = async (
   videoCallingId: string,
   user: IRequestUser,
 ) => {
@@ -453,6 +454,56 @@ const getAppointmentByVideoCallId = async (
   }
 
   return appointment;
+};
+
+const getAppointmentByVideoCallId = async (
+  videoCallingId: string,
+  user: IRequestUser,
+) => {
+  return findAppointmentByVideoCallId(videoCallingId, user);
+};
+
+const getVideoCallToken = async (
+  videoCallingId: string,
+  user: IRequestUser,
+) => {
+  const appointment = await findAppointmentByVideoCallId(videoCallingId, user);
+
+  if (
+    appointment.status === AppointmentStatus.COMPLETED ||
+    appointment.status === AppointmentStatus.CANCELED
+  ) {
+    throw new AppError(
+      status.BAD_REQUEST,
+      `This consultation is ${appointment.status.toLowerCase()}. You cannot join it.`,
+    );
+  }
+
+  const userData = await prisma.user.findUniqueOrThrow({
+    where: {
+      id: user.userId,
+    },
+    select: {
+      id: true,
+      name: true,
+      role: true,
+    },
+  });
+
+  const token = await liveKitUtils.createLiveKitAccessToken({
+    roomName: appointment.videoCallingId,
+    identity: userData.id,
+    name: userData.name,
+    ttl: "2h",
+  });
+
+  return {
+    url: liveKitUtils.getLiveKitUrl(),
+    token,
+    identity: userData.id,
+    name: userData.name,
+    role: userData.role,
+  };
 };
 
 // integrate query builder
@@ -775,6 +826,7 @@ export const AppointmentService = {
   getAllAppointments,
   getPatientHealthRecords,
   getAppointmentByVideoCallId,
+  getVideoCallToken,
   bookAppointmentWithPayLater,
   initiatePayment,
   verifyPayment,

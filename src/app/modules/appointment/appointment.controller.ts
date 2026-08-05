@@ -91,6 +91,19 @@ const getAppointmentByVideoCallId = catchAsync(async (req: Request, res: Respons
     });
 });
 
+const getVideoCallToken = catchAsync(async (req: Request, res: Response) => {
+    const videoCallingId = req.params.videoCallingId;
+    const user = req.user;
+
+    const tokenData = await AppointmentService.getVideoCallToken(videoCallingId as string, user);
+    sendResponse(res, {
+        success: true,
+        httpStatusCode: status.OK,
+        message: 'Video call token generated successfully',
+        data: tokenData
+    });
+});
+
 const bookAppointmentWithPayLater = catchAsync(async (req: Request, res: Response) => {
     const payload = req.body;
     const user = req.user;
@@ -142,6 +155,7 @@ export const AppointmentController = {
     getAllAppointments,
     getPatientHealthRecords,
     getAppointmentByVideoCallId,
+    getVideoCallToken,
     bookAppointmentWithPayLater,
     initiatePayment,
     verifyPayment,
