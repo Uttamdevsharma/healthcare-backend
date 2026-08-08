@@ -13,6 +13,7 @@ import { SpecialtyRoutes } from '../modules/speciality/speciality.routes'
 import { StatsRoutes } from '../modules/stats/stats.route'
 import { UserRouter } from '../modules/user/user.route'
 import { scheduleRoutes } from '../modules/schedule/schedule.route'
+import { RagRoutes } from '../modules/rag/rag.route'
 
 const router = Router()
 
