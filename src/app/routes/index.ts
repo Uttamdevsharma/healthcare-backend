@@ -30,6 +30,7 @@ router.use('/patients', PatientRoutes)
 router.use('/prescriptions', PrescriptionRoutes)
 router.use('/reviews', ReviewRoutes)
 router.use('/payments', PaymentRoutes)
+router.use("/rag", RagRoutes);
 
 
-export const IndexRoutes = router
+export const IndexRoutes = router

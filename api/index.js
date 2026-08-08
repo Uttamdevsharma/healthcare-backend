@@ -16090,10 +16090,70 @@ var AuthRoutes = router3;
 import { Router as Router4 } from "express";
 
 // src/app/modules/doctor/doctor.controller.ts
-import status11 from "http-status";
+import status12 from "http-status";
+
+// src/app/config/cloudinary.config.ts
+import status10 from "http-status";
+import { v2 as cloudinary } from "cloudinary";
+cloudinary.config({
+  cloud_name: envVars.CLOUDINARY.CLOUDINARY_CLOUD_NAME,
+  api_key: envVars.CLOUDINARY.CLOUDINARY_API_KEY,
+  api_secret: envVars.CLOUDINARY.CLOUDINARY_API_SECRET
+});
+var uploadFileToCloudinary = async (buffer, fileName) => {
+  if (!buffer || !fileName) {
+    throw new AppError_default(
+      status10.BAD_REQUEST,
+      "File buffer and file name are required for upload"
+    );
+  }
+  const extension = fileName.split(".").pop()?.toLocaleLowerCase();
+  const fileNameWithoutExtension = fileName.split(".").slice(0, -1).join(".").toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9\-]/g, "");
+  const uniqueName = Math.random().toString(36).substring(2) + "-" + Date.now() + "-" + fileNameWithoutExtension;
+  const folder = extension === "pdf" ? "pdfs" : "images";
+  return new Promise((resolve, reject) => {
+    cloudinary.uploader.upload_stream(
+      {
+        resource_type: "auto",
+        public_id: `ph-healthcare/${folder}/${uniqueName}`,
+        folder: `ph-healthcare/${folder}`
+      },
+      (error48, result) => {
+        if (error48) {
+          return reject(
+            new AppError_default(
+              status10.INTERNAL_SERVER_ERROR,
+              "Failed to upload file to Cloudinary"
+            )
+          );
+        }
+        resolve(result);
+      }
+    ).end(buffer);
+  });
+};
+var deleteFileFromCloudinary = async (url2) => {
+  try {
+    const regex = /\/v\d+\/(.+?)(?:\.[a-zA-Z0-9]+)+$/;
+    const match = url2.match(regex);
+    if (match && match[1]) {
+      const publicId = match[1];
+      await cloudinary.uploader.destroy(publicId, {
+        resource_type: "auto"
+      });
+      console.log(`File ${publicId} deleted from cloudinary`);
+    }
+  } catch (error48) {
+    console.error("Error deleting file from Cloudinary:", error48);
+    throw new AppError_default(
+      status10.INTERNAL_SERVER_ERROR,
+      "Failed to delete file from Cloudinary"
+    );
+  }
+};
 
 // src/app/modules/doctor/doctor.service.ts
-import status10 from "http-status";
+import status11 from "http-status";
 
 // src/app/modules/doctor/doctor.constant.ts
 var doctorSearchableFields = ["name", "email", "qualification", "designation", "currentWorkingPlace", "registrationNumber", "specialties.specialty.title"];
@@ -16548,7 +16608,7 @@ var updateDoctor = async (id, payload) => {
     }
   });
   if (!isDoctorExist) {
-    throw new AppError_default(status10.NOT_FOUND, "Doctor not found");
+    throw new AppError_default(status11.NOT_FOUND, "Doctor not found");
   }
   const { doctor: doctorData, specialties } = payload;
   await prisma.$transaction(async (tx) => {
@@ -16601,7 +16661,7 @@ var deleteDoctor = async (id) => {
     include: { user: true }
   });
   if (!isDoctorExist) {
-    throw new AppError_default(status10.NOT_FOUND, "Doctor not found");
+    throw new AppError_default(status11.NOT_FOUND, "Doctor not found");
   }
   await prisma.$transaction(async (tx) => {
     await tx.doctor.update({
@@ -16643,7 +16703,7 @@ var getAllDoctors2 = catchAsync(
     const query = req.query;
     const result = await DoctorService.getAllDoctors(query);
     sendResponse(res, {
-      httpStatusCode: status11.OK,
+      httpStatusCode: status12.OK,
       success: true,
       message: "Doctors fetched successfully",
       data: result.data,
@@ -16656,7 +16716,7 @@ var getTopRatedDoctors2 = catchAsync(
     const query = req.query;
     const doctors = await DoctorService.getTopRatedDoctors(query);
     sendResponse(res, {
-      httpStatusCode: status11.OK,
+      httpStatusCode: status12.OK,
       success: true,
       message: "Top rated doctors fetched successfully",
       data: doctors
@@ -16668,7 +16728,7 @@ var getDoctorById2 = catchAsync(
     const { id } = req.params;
     const doctor = await DoctorService.getDoctorById(id);
     sendResponse(res, {
-      httpStatusCode: status11.OK,
+      httpStatusCode: status12.OK,
       success: true,
       message: "Doctor fetched successfully",
       data: doctor
@@ -16683,11 +16743,14 @@ var updateDoctor2 = catchAsync(
       if (!payload.doctor) {
         payload.doctor = {};
       }
-      payload.doctor.profilePhoto = req.file.path;
+      const extension = req.file.originalname.split(".").pop();
+      const fileName = `doctor-profile-${Date.now()}.${extension}`;
+      const uploadedFile = await uploadFileToCloudinary(req.file.buffer, fileName);
+      payload.doctor.profilePhoto = uploadedFile.secure_url;
     }
     const updatedDoctor = await DoctorService.updateDoctor(id, payload);
     sendResponse(res, {
-      httpStatusCode: status11.OK,
+      httpStatusCode: status12.OK,
       success: true,
       message: "Doctor updated successfully",
       data: updatedDoctor
@@ -16699,7 +16762,7 @@ var deleteDoctor2 = catchAsync(
     const { id } = req.params;
     const result = await DoctorService.deleteDoctor(id);
     sendResponse(res, {
-      httpStatusCode: status11.OK,
+      httpStatusCode: status12.OK,
       success: true,
       message: "Doctor deleted successfully",
       data: result
@@ -16776,7 +16839,7 @@ var DoctorRoutes = router4;
 import { Router as Router5 } from "express";
 
 // src/app/modules/doctorSchedule/doctorSchedule.controller.ts
-import status12 from "http-status";
+import status13 from "http-status";
 
 // src/app/modules/doctorSchedule/doctorSchedule.constant.ts
 var doctorScheduleSearchableFields = [
@@ -16941,7 +17004,7 @@ var createMyDoctorSchedule2 = catchAsync(async (req, res) => {
   const doctorSchedule = await DoctorScheduleService.createMyDoctorSchedule(user, payload);
   sendResponse(res, {
     success: true,
-    httpStatusCode: status12.CREATED,
+    httpStatusCode: status13.CREATED,
     message: "Doctor schedule created successfully",
     data: doctorSchedule
   });
@@ -16952,7 +17015,7 @@ var getMyDoctorSchedules2 = catchAsync(async (req, res) => {
   const result = await DoctorScheduleService.getMyDoctorSchedules(user, query);
   sendResponse(res, {
     success: true,
-    httpStatusCode: status12.OK,
+    httpStatusCode: status13.OK,
     message: "Doctor schedules retrieved successfully",
     data: result.data,
     meta: result.meta
@@ -16963,7 +17026,7 @@ var getAllDoctorSchedules2 = catchAsync(async (req, res) => {
   const result = await DoctorScheduleService.getAllDoctorSchedules(query);
   sendResponse(res, {
     success: true,
-    httpStatusCode: status12.OK,
+    httpStatusCode: status13.OK,
     message: "All doctor schedules retrieved successfully",
     data: result.data,
     meta: result.meta
@@ -16975,7 +17038,7 @@ var getDoctorScheduleById2 = catchAsync(async (req, res) => {
   const doctorSchedule = await DoctorScheduleService.getDoctorScheduleById(doctorId, scheduleId);
   sendResponse(res, {
     success: true,
-    httpStatusCode: status12.OK,
+    httpStatusCode: status13.OK,
     message: "Doctor schedule retrieved successfully",
     data: doctorSchedule
   });
@@ -16986,7 +17049,7 @@ var updateMyDoctorSchedule2 = catchAsync(async (req, res) => {
   const updatedDoctorSchedule = await DoctorScheduleService.updateMyDoctorSchedule(user, payload);
   sendResponse(res, {
     success: true,
-    httpStatusCode: status12.OK,
+    httpStatusCode: status13.OK,
     message: "Doctor schedule updated successfully",
     data: updatedDoctorSchedule
   });
@@ -16997,7 +17060,7 @@ var deleteMyDoctorSchedule2 = catchAsync(async (req, res) => {
   await DoctorScheduleService.deleteMyDoctorSchedule(id, user);
   sendResponse(res, {
     success: true,
-    httpStatusCode: status12.OK,
+    httpStatusCode: status13.OK,
     message: "Doctor schedule deleted successfully"
   });
 });
@@ -17033,66 +17096,6 @@ import { Router as Router6 } from "express";
 
 // src/app/modules/patient/patient.controller.ts
 import status15 from "http-status";
-
-// src/app/config/cloudinary.config.ts
-import status13 from "http-status";
-import { v2 as cloudinary } from "cloudinary";
-cloudinary.config({
-  cloud_name: envVars.CLOUDINARY.CLOUDINARY_CLOUD_NAME,
-  api_key: envVars.CLOUDINARY.CLOUDINARY_API_KEY,
-  api_secret: envVars.CLOUDINARY.CLOUDINARY_API_SECRET
-});
-var uploadFileToCloudinary = async (buffer, fileName) => {
-  if (!buffer || !fileName) {
-    throw new AppError_default(
-      status13.BAD_REQUEST,
-      "File buffer and file name are required for upload"
-    );
-  }
-  const extension = fileName.split(".").pop()?.toLocaleLowerCase();
-  const fileNameWithoutExtension = fileName.split(".").slice(0, -1).join(".").toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9\-]/g, "");
-  const uniqueName = Math.random().toString(36).substring(2) + "-" + Date.now() + "-" + fileNameWithoutExtension;
-  const folder = extension === "pdf" ? "pdfs" : "images";
-  return new Promise((resolve, reject) => {
-    cloudinary.uploader.upload_stream(
-      {
-        resource_type: "auto",
-        public_id: `ph-healthcare/${folder}/${uniqueName}`,
-        folder: `ph-healthcare/${folder}`
-      },
-      (error48, result) => {
-        if (error48) {
-          return reject(
-            new AppError_default(
-              status13.INTERNAL_SERVER_ERROR,
-              "Failed to upload file to Cloudinary"
-            )
-          );
-        }
-        resolve(result);
-      }
-    ).end(buffer);
-  });
-};
-var deleteFileFromCloudinary = async (url2) => {
-  try {
-    const regex = /\/v\d+\/(.+?)(?:\.[a-zA-Z0-9]+)+$/;
-    const match = url2.match(regex);
-    if (match && match[1]) {
-      const publicId = match[1];
-      await cloudinary.uploader.destroy(publicId, {
-        resource_type: "auto"
-      });
-      console.log(`File ${publicId} deleted from cloudinary`);
-    }
-  } catch (error48) {
-    console.error("Error deleting file from Cloudinary:", error48);
-    throw new AppError_default(
-      status13.INTERNAL_SERVER_ERROR,
-      "Failed to delete file from Cloudinary"
-    );
-  }
-};
 
 // src/app/modules/patient/patient.utils.ts
 import { isValid } from "date-fns";
